@@ -6,8 +6,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { useLanguage } from "@/contexts/LanguageContext";
 
-const letterTemplate = `السلام عليكم ورحمة الله وبركاته،
+const letterTemplateAr = `السلام عليكم ورحمة الله وبركاته،
 
 إلى سعادة مدير إدارة الموارد البشرية المحترم،
 
@@ -26,27 +27,49 @@ const letterTemplate = `السلام عليكم ورحمة الله وبركات
 رقم الهوية: [رقم الهوية]
 التاريخ: [التاريخ]`;
 
+const letterTemplateEn = `Dear Sir/Madam,
+
+To the Respected Director of Human Resources,
+
+Subject: Complaint Regarding Unfair Dismissal
+
+I am writing to submit this complaint as a former employee of [Company Name], where my services were terminated on [Date] without a legitimate reason and in violation of labor law provisions.
+
+Based on the above, I request the following:
+1. Compensation for unfair dismissal
+2. Payment of end-of-service benefits
+3. Provision of an experience certificate
+
+Yours respectfully,
+
+Complainant: [Name]
+ID Number: [ID Number]
+Date: [Date]`;
+
 export default function LetterGeneration() {
-  const [recipient, setRecipient] = useState("وزارة الموارد البشرية");
-  const [letterContent, setLetterContent] = useState(letterTemplate);
+  const { t, language } = useLanguage();
+  const [recipient, setRecipient] = useState(t("letter.defaultRecipient"));
+  const [letterContent, setLetterContent] = useState(
+    language === "ar" ? letterTemplateAr : letterTemplateEn
+  );
   const [isEditing, setIsEditing] = useState(false);
 
   const handleDownload = () => {
     toast({
-      title: "جاري التحميل",
-      description: "سيتم تحميل الخطاب بصيغة PDF",
+      title: t("letter.downloading"),
+      description: t("letter.downloadDesc"),
     });
   };
 
   const handleSend = () => {
     toast({
-      title: "تم الإرسال",
-      description: "تم إرسال الخطاب بنجاح",
+      title: t("letter.sent"),
+      description: t("letter.sentDesc"),
     });
   };
 
   return (
-    <PageLayout title="إنشاء خطاب رسمي">
+    <PageLayout title={t("letter.title")}>
       <div className="space-y-6">
         {/* Recipient */}
         <motion.div
@@ -54,7 +77,7 @@ export default function LetterGeneration() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-2"
         >
-          <label className="text-sm font-medium text-foreground">الجهة المستلمة</label>
+          <label className="text-sm font-medium text-foreground">{t("letter.recipient")}</label>
           <Input
             value={recipient}
             onChange={(e) => setRecipient(e.target.value)}
@@ -70,15 +93,15 @@ export default function LetterGeneration() {
           className="space-y-2"
         >
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-foreground">محتوى الخطاب</label>
+            <label className="text-sm font-medium text-foreground">{t("letter.content")}</label>
             <Button
               variant="ghost"
               size="sm"
               onClick={() => setIsEditing(!isEditing)}
               className="text-primary"
             >
-              <Edit3 className="ml-1 h-4 w-4" />
-              {isEditing ? "معاينة" : "تعديل"}
+              <Edit3 className="me-1 h-4 w-4" />
+              {isEditing ? t("letter.preview") : t("letter.edit")}
             </Button>
           </div>
           {isEditing ? (
@@ -101,10 +124,10 @@ export default function LetterGeneration() {
           transition={{ delay: 0.2 }}
           className="space-y-3"
         >
-          <h3 className="text-sm font-medium text-foreground">بياناتك الشخصية</h3>
-          <Input placeholder="الاسم الكامل" className="bg-card" />
-          <Input placeholder="رقم الهوية" className="bg-card" />
-          <Input placeholder="رقم الجوال" className="bg-card" />
+          <h3 className="text-sm font-medium text-foreground">{t("letter.personalInfo")}</h3>
+          <Input placeholder={t("letter.fullName")} className="bg-card" />
+          <Input placeholder={t("letter.idNumber")} className="bg-card" />
+          <Input placeholder={t("letter.phone")} className="bg-card" />
         </motion.div>
 
         {/* Action Buttons */}
@@ -115,12 +138,12 @@ export default function LetterGeneration() {
           className="grid grid-cols-2 gap-3"
         >
           <Button onClick={handleDownload} variant="outline" className="py-4">
-            <Download className="ml-2 h-4 w-4" />
-            تحميل PDF
+            <Download className="me-2 h-4 w-4" />
+            {t("letter.downloadPdf")}
           </Button>
           <Button onClick={handleSend} className="py-4">
-            <Send className="ml-2 h-4 w-4" />
-            إرسال الخطاب
+            <Send className="me-2 h-4 w-4" />
+            {t("letter.send")}
           </Button>
         </motion.div>
       </div>

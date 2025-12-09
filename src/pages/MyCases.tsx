@@ -3,39 +3,42 @@ import { Bell } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { CaseCard } from "@/components/cases/CaseCard";
 import { Badge } from "@/components/ui/badge";
-
-const mockCases = [
-  {
-    id: "1",
-    title: "شكوى فصل تعسفي",
-    category: "العمل",
-    status: "reviewing" as const,
-    date: "2024-01-15",
-  },
-  {
-    id: "2",
-    title: "استرداد مبلغ مشتريات",
-    category: "التجارة الإلكترونية",
-    status: "sent" as const,
-    date: "2024-01-10",
-  },
-  {
-    id: "3",
-    title: "نزاع عقد إيجار",
-    category: "العقارات",
-    status: "closed" as const,
-    date: "2023-12-20",
-  },
-];
-
-const mockNotifications = [
-  { id: "1", text: "تم تحديث حالة قضيتك رقم #1234", time: "منذ ساعة" },
-  { id: "2", text: "تم استلام ردك على الشكوى", time: "منذ يومين" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function MyCases() {
+  const { t } = useLanguage();
+
+  const mockCases = [
+    {
+      id: "1",
+      title: t("case.unfairDismissal"),
+      category: t("category.work"),
+      status: "reviewing" as const,
+      date: "2024-01-15",
+    },
+    {
+      id: "2",
+      title: t("case.refund"),
+      category: t("category.ecommerce"),
+      status: "sent" as const,
+      date: "2024-01-10",
+    },
+    {
+      id: "3",
+      title: t("case.rentalDispute"),
+      category: t("category.realestate"),
+      status: "closed" as const,
+      date: "2023-12-20",
+    },
+  ];
+
+  const mockNotifications = [
+    { id: "1", text: t("notification.updated"), time: t("notification.hourAgo") },
+    { id: "2", text: t("notification.received"), time: t("notification.daysAgo") },
+  ];
+
   return (
-    <PageLayout title="قضاياي">
+    <PageLayout title={t("myCases.title")}>
       <div className="space-y-6">
         {/* Notifications */}
         <motion.div
@@ -45,7 +48,7 @@ export default function MyCases() {
         >
           <div className="flex items-center gap-2">
             <Bell className="h-5 w-5 text-primary" />
-            <h2 className="font-semibold text-foreground">الإشعارات</h2>
+            <h2 className="font-semibold text-foreground">{t("myCases.notifications")}</h2>
             <Badge className="bg-primary text-primary-foreground">{mockNotifications.length}</Badge>
           </div>
           <div className="space-y-2">
@@ -68,7 +71,7 @@ export default function MyCases() {
           transition={{ delay: 0.1 }}
           className="space-y-3"
         >
-          <h2 className="font-semibold text-foreground">جميع القضايا</h2>
+          <h2 className="font-semibold text-foreground">{t("myCases.allCases")}</h2>
           <div className="space-y-3">
             {mockCases.map((caseItem, index) => (
               <motion.div
@@ -86,7 +89,7 @@ export default function MyCases() {
         {/* Empty State */}
         {mockCases.length === 0 && (
           <div className="py-12 text-center">
-            <p className="text-muted">لا توجد قضايا حتى الآن</p>
+            <p className="text-muted">{t("myCases.noCases")}</p>
           </div>
         )}
       </div>
