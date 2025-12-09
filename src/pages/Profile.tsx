@@ -8,29 +8,28 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "@/hooks/use-toast";
-import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Profile() {
-  const { t, language, setLanguage } = useLanguage();
+  const [language, setLanguage] = useState("ar");
   const [notifications, setNotifications] = useState(true);
 
   const handleSave = () => {
     toast({
-      title: t("profile.saved"),
-      description: t("profile.savedDesc"),
+      title: "تم الحفظ",
+      description: "تم حفظ التغييرات بنجاح",
     });
   };
 
   const handleDeleteAccount = () => {
     toast({
-      title: t("profile.alert"),
-      description: t("profile.deleteConfirm"),
+      title: "تنبيه",
+      description: "هل أنت متأكد من حذف حسابك؟",
       variant: "destructive",
     });
   };
 
   return (
-    <PageLayout title={t("profile.title")}>
+    <PageLayout title="حسابي">
       <div className="space-y-6">
         {/* Profile Header */}
         <motion.div
@@ -41,7 +40,7 @@ export default function Profile() {
           <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary/10">
             <User className="h-10 w-10 text-primary" />
           </div>
-          <h2 className="mt-3 text-lg font-semibold text-foreground">{t("profile.user")}</h2>
+          <h2 className="mt-3 text-lg font-semibold text-foreground">مستخدم حقي</h2>
           <p className="text-sm text-muted">user@example.com</p>
         </motion.div>
 
@@ -52,7 +51,7 @@ export default function Profile() {
           transition={{ delay: 0.1 }}
         >
           <Button className="w-full py-4 font-semibold" size="lg">
-            {t("profile.loginSignup")}
+            تسجيل الدخول / إنشاء حساب
           </Button>
         </motion.div>
 
@@ -65,19 +64,19 @@ export default function Profile() {
           transition={{ delay: 0.2 }}
           className="space-y-4"
         >
-          <h3 className="font-semibold text-foreground">{t("profile.personalInfo")}</h3>
+          <h3 className="font-semibold text-foreground">المعلومات الشخصية</h3>
           <div className="space-y-3">
             <div className="relative">
-              <User className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-              <Input placeholder={t("profile.fullName")} className="ps-10 bg-card" />
+              <User className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+              <Input placeholder="الاسم الكامل" className="pr-10 bg-card" />
             </div>
             <div className="relative">
-              <Phone className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-              <Input placeholder={t("profile.phone")} className="ps-10 bg-card" dir="ltr" />
+              <Phone className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+              <Input placeholder="رقم الجوال" className="pr-10 bg-card" dir="ltr" />
             </div>
             <div className="relative">
-              <Mail className="absolute start-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-              <Input placeholder={t("profile.email")} className="ps-10 bg-card" dir="ltr" />
+              <Mail className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+              <Input placeholder="البريد الإلكتروني" className="pr-10 bg-card" dir="ltr" />
             </div>
           </div>
         </motion.div>
@@ -89,15 +88,15 @@ export default function Profile() {
           transition={{ delay: 0.3 }}
           className="space-y-4"
         >
-          <h3 className="font-semibold text-foreground">{t("profile.settings")}</h3>
+          <h3 className="font-semibold text-foreground">الإعدادات</h3>
           
           {/* Language */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Globe className="h-4 w-4 text-muted" />
-              <span className="text-sm text-foreground">{t("profile.language")}</span>
+              <span className="text-sm text-foreground">اللغة</span>
             </div>
-            <Select value={language} onValueChange={(value: "ar" | "en") => setLanguage(value)}>
+            <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger className="w-32 bg-card">
                 <SelectValue />
               </SelectTrigger>
@@ -112,7 +111,7 @@ export default function Profile() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-muted" />
-              <span className="text-sm text-foreground">{t("profile.notifications")}</span>
+              <span className="text-sm text-foreground">الإشعارات</span>
             </div>
             <Switch checked={notifications} onCheckedChange={setNotifications} />
           </div>
@@ -125,7 +124,7 @@ export default function Profile() {
           transition={{ delay: 0.4 }}
         >
           <Button onClick={handleSave} className="w-full py-4">
-            {t("profile.saveChanges")}
+            حفظ التغييرات
           </Button>
         </motion.div>
 
@@ -139,16 +138,16 @@ export default function Profile() {
           className="space-y-3"
         >
           <Button variant="outline" className="w-full justify-start text-muted">
-            <LogOut className="me-2 h-4 w-4" />
-            {t("profile.logout")}
+            <LogOut className="ml-2 h-4 w-4" />
+            تسجيل الخروج
           </Button>
           <Button
             variant="outline"
             onClick={handleDeleteAccount}
             className="w-full justify-start text-destructive border-destructive/20 hover:bg-destructive/10"
           >
-            <Trash2 className="me-2 h-4 w-4" />
-            {t("profile.deleteAccount")}
+            <Trash2 className="ml-2 h-4 w-4" />
+            حذف الحساب
           </Button>
         </motion.div>
       </div>

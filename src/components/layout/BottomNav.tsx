@@ -1,18 +1,15 @@
 import { Home, Plus, FolderOpen, GraduationCap, User } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
-import { useLanguage } from "@/contexts/LanguageContext";
+
+const navItems = [
+  { to: "/", icon: Home, label: "الرئيسية" },
+  { to: "/create-case", icon: Plus, label: "قضية جديدة" },
+  { to: "/my-cases", icon: FolderOpen, label: "قضاياي" },
+  { to: "/academy", icon: GraduationCap, label: "الأكاديمية" },
+  { to: "/profile", icon: User, label: "حسابي" },
+];
 
 export function BottomNav() {
-  const { t } = useLanguage();
-
-  const navItems = [
-    { to: "/", icon: Home, labelKey: "nav.home" },
-    { to: "/create-case", icon: Plus, labelKey: "nav.newCase" },
-    { to: "/my-cases", icon: FolderOpen, labelKey: "nav.myCases" },
-    { to: "/academy", icon: GraduationCap, labelKey: "nav.academy" },
-    { to: "/profile", icon: User, labelKey: "nav.profile" },
-  ];
-
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card shadow-lg">
       <div className="mx-auto flex max-w-lg items-center justify-around py-2">
@@ -24,7 +21,7 @@ export function BottomNav() {
             activeClassName="text-primary"
           >
             <item.icon className="h-5 w-5" />
-            <span className="text-xs font-medium">{t(item.labelKey)}</span>
+            <span className="text-xs font-medium">{item.label}</span>
           </NavLink>
         ))}
       </div>

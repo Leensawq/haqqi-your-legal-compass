@@ -5,20 +5,18 @@ import { PageLayout } from "@/components/layout/PageLayout";
 import { SearchBar } from "@/components/home/SearchBar";
 import { CategoryCard } from "@/components/home/CategoryCard";
 import { Button } from "@/components/ui/button";
-import { useLanguage } from "@/contexts/LanguageContext";
+
+const categories = [
+  { icon: Briefcase, title: "العمل", description: "حقوق العمال وقانون العمل" },
+  { icon: Heart, title: "الصحة", description: "حقوق المرضى والتأمين" },
+  { icon: Users, title: "الأسرة", description: "قانون الأحوال الشخصية" },
+  { icon: GraduationCap, title: "التعليم", description: "حقوق الطلاب" },
+  { icon: ShoppingCart, title: "التجارة الإلكترونية", description: "حماية المستهلك" },
+  { icon: Building, title: "العقارات", description: "قوانين الإيجار والملكية" },
+];
 
 export default function Home() {
   const navigate = useNavigate();
-  const { t } = useLanguage();
-
-  const categories = [
-    { icon: Briefcase, titleKey: "category.work", descKey: "category.work.desc" },
-    { icon: Heart, titleKey: "category.health", descKey: "category.health.desc" },
-    { icon: Users, titleKey: "category.family", descKey: "category.family.desc" },
-    { icon: GraduationCap, titleKey: "category.education", descKey: "category.education.desc" },
-    { icon: ShoppingCart, titleKey: "category.ecommerce", descKey: "category.ecommerce.desc" },
-    { icon: Building, titleKey: "category.realestate", descKey: "category.realestate.desc" },
-  ];
 
   return (
     <PageLayout>
@@ -29,8 +27,8 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           className="text-center"
         >
-          <h1 className="text-3xl font-bold text-primary">{t("app.name")}</h1>
-          <p className="mt-2 text-muted">{t("app.tagline")}</p>
+          <h1 className="text-3xl font-bold text-primary">حقي</h1>
+          <p className="mt-2 text-muted">اعرف حقوقك القانونية بكل سهولة</p>
         </motion.div>
 
         {/* Main CTA */}
@@ -44,7 +42,7 @@ export default function Home() {
             className="w-full py-6 text-lg font-semibold"
             size="lg"
           >
-            {t("home.enterSituation")}
+            أدخل موقفي
           </Button>
         </motion.div>
 
@@ -63,20 +61,20 @@ export default function Home() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <h2 className="mb-4 text-lg font-semibold text-foreground">{t("home.legalCategories")}</h2>
+          <h2 className="mb-4 text-lg font-semibold text-foreground">التصنيفات القانونية</h2>
           <div className="grid grid-cols-2 gap-3">
             {categories.map((category, index) => (
               <motion.div
-                key={category.titleKey}
+                key={category.title}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 + index * 0.05 }}
               >
                 <CategoryCard
                   icon={category.icon}
-                  title={t(category.titleKey)}
-                  description={t(category.descKey)}
-                  onClick={() => navigate(`/create-case?category=${t(category.titleKey)}`)}
+                  title={category.title}
+                  description={category.description}
+                  onClick={() => navigate(`/create-case?category=${category.title}`)}
                 />
               </motion.div>
             ))}
