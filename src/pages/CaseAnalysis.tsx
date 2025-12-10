@@ -333,11 +333,20 @@ export default function CaseAnalysis() {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full py-6 text-lg" size="lg">
+                <Button 
+                  className="w-full py-6 text-lg" 
+                  size="lg"
+                  onClick={() => navigate("/home")}
+                >
                   <Download className="w-5 h-5 ml-2" />
                   تحميل الخطاب والمستندات
                 </Button>
-                <Button variant="outline" className="w-full py-6 text-lg border-border/50 text-foreground hover:bg-primary/20 hover:text-primary hover:border-primary" size="lg">
+                <Button 
+                  variant="outline" 
+                  className="w-full py-6 text-lg border-border/50 text-foreground hover:bg-primary/20 hover:text-primary hover:border-primary transition-all" 
+                  size="lg"
+                  onClick={() => window.open("https://www.mol.gov.sa/Services/Complaints", "_blank", "noopener,noreferrer")}
+                >
                   <ExternalLink className="w-5 h-5 ml-2" />
                   الانتقال لمنصة البلاغات
                 </Button>
