@@ -4,23 +4,12 @@ import { motion } from "framer-motion";
 import { FileText, Image, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { WebLayout } from "@/components/layout/WebLayout";
-
-const categories = [
-  { value: "work", label: "العمل" },
-  { value: "family", label: "الأسرة" },
-  { value: "health", label: "الصحة" },
-  { value: "finance", label: "المالية" },
-  { value: "housing", label: "السكن" },
-  { value: "ecommerce", label: "التجارة الإلكترونية" },
-];
 
 export default function NewCase() {
   const navigate = useNavigate();
   const [situation, setSituation] = useState("");
-  const [category, setCategory] = useState("");
   const [ocrEnabled, setOcrEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -70,25 +59,6 @@ export default function NewCase() {
                   className="min-h-[200px] text-base bg-background border-border text-card-foreground resize-none"
                   dir="rtl"
                 />
-              </div>
-
-              {/* Category Select */}
-              <div className="space-y-3">
-                <label className="block text-sm font-semibold text-card-foreground">
-                  تصنيف القضية (اختياري)
-                </label>
-                <Select value={category} onValueChange={setCategory}>
-                  <SelectTrigger className="w-full bg-background border-border text-card-foreground">
-                    <SelectValue placeholder="اختر التصنيف" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {categories.map((cat) => (
-                      <SelectItem key={cat.value} value={cat.value}>
-                        {cat.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
               </div>
 
               {/* Attachments */}
