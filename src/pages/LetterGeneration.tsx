@@ -85,10 +85,12 @@ export default function LetterGeneration() {
             <Textarea
               value={letterContent}
               onChange={(e) => setLetterContent(e.target.value)}
-              className="min-h-[400px] bg-card font-arabic text-sm leading-relaxed"
+              className="min-h-[400px] bg-white font-arabic text-base leading-relaxed text-[#000000] placeholder:text-[#6B7280]"
+              style={{ lineHeight: '1.6', fontSize: '16px' }}
             />
           ) : (
-            <div className="rounded-xl bg-card p-4 text-sm leading-relaxed whitespace-pre-wrap">
+            <div className="rounded-xl bg-white p-4 text-base leading-relaxed whitespace-pre-wrap text-[#000000] border border-gray-200"
+              style={{ lineHeight: '1.6', fontSize: '16px' }}>
               {letterContent}
             </div>
           )}
