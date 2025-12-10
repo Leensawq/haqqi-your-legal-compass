@@ -2,19 +2,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Login from "./pages/Login";
-import CreateCase from "./pages/CreateCase";
-import Analysis from "./pages/Analysis";
-import LegalRight from "./pages/LegalRight";
-import OfficialSteps from "./pages/OfficialSteps";
-import Authority from "./pages/Authority";
-import ComplaintGenerator from "./pages/ComplaintGenerator";
-import LetterGeneration from "./pages/LetterGeneration";
+import Home from "./pages/Home";
+import NewCase from "./pages/NewCase";
+import CaseAnalysis from "./pages/CaseAnalysis";
 import MyCases from "./pages/MyCases";
-import Academy from "./pages/Academy";
 import Profile from "./pages/Profile";
+import Academy from "./pages/Academy";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,21 +21,19 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/create-case" element={<CreateCase />} />
-          <Route path="/analysis" element={<Analysis />} />
-          <Route path="/legal-right" element={<LegalRight />} />
-          <Route path="/official-steps" element={<OfficialSteps />} />
-          <Route path="/authority" element={<Authority />} />
-          <Route path="/complaint-generator" element={<ComplaintGenerator />} />
-          <Route path="/letter" element={<LetterGeneration />} />
-          <Route path="/my-cases" element={<MyCases />} />
-          <Route path="/academy" element={<Academy />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/home" element={<Home />} />
+            <Route path="/new-case" element={<NewCase />} />
+            <Route path="/case-analysis" element={<CaseAnalysis />} />
+            <Route path="/my-cases" element={<MyCases />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/academy" element={<Academy />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
