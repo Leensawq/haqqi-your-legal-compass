@@ -94,11 +94,11 @@ export default function CaseAnalysis() {
                     style={{ width: `${progress}%` }}
                   />
                 </div>
-                {/* RTL Progress Labels: بحث → تحليل → جاهز (right to left visually) */}
+                {/* RTL Progress Labels: بحث → تحليل → جاهز (displayed right to left, starting from بحث on the right) */}
                 <div className="flex justify-between text-base font-medium">
                   <span className={`transition-colors ${progress >= 100 ? "text-primary font-bold" : "text-foreground/50"}`}>جاهز</span>
-                  <span className={`transition-colors ${progress >= 50 && progress < 100 ? "text-primary font-bold" : "text-foreground/50"}`}>تحليل</span>
-                  <span className={`transition-colors ${progress > 0 && progress < 50 ? "text-primary font-bold" : progress >= 50 ? "text-primary" : "text-foreground/50"}`}>بحث</span>
+                  <span className={`transition-colors ${progress >= 50 ? "text-primary font-bold" : "text-foreground/50"}`}>تحليل</span>
+                  <span className={`transition-colors ${progress > 0 ? "text-primary font-bold" : "text-foreground/50"}`}>بحث</span>
                 </div>
               </div>
 
@@ -336,7 +336,7 @@ export default function CaseAnalysis() {
                 <Button 
                   className="w-full py-6 text-lg" 
                   size="lg"
-                  onClick={() => navigate("/home")}
+                  onClick={() => navigate("/letter-generation")}
                 >
                   <Download className="w-5 h-5 ml-2" />
                   تحميل الخطاب والمستندات
