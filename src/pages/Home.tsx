@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, Search, BookOpen } from "lucide-react";
+import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, Search, BookOpen, Globe, Baby, Accessibility } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,6 +12,9 @@ const categories = [
   { icon: Wallet, title: "الحقوق المالية", description: "القروض والديون والتأمين" },
   { icon: HomeIcon, title: "السكن", description: "الإيجار والعقارات" },
   { icon: ShoppingCart, title: "التجارة الإلكترونية", description: "حقوق المستهلك والاحتيال" },
+  { icon: Globe, title: "الاتفاقيات الدولية", description: "المواثيق والمعاهدات الدولية" },
+  { icon: Baby, title: "حقوق الطفل", description: "حماية الطفل وتعزيز رفاهيته" },
+  { icon: Accessibility, title: "حقوق ذوي الإعاقة", description: "الإعاقات البصرية والسمعية والحركية" },
 ];
 
 export default function Home() {
