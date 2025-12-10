@@ -1,95 +1,87 @@
 import { motion } from "framer-motion";
-import { Bell } from "lucide-react";
-import { PageLayout } from "@/components/layout/PageLayout";
-import { CaseCard } from "@/components/cases/CaseCard";
-import { Badge } from "@/components/ui/badge";
+import { Bell, Clock, CheckCircle2, AlertCircle, FileText, ChevronLeft } from "lucide-react";
+import { WebLayout } from "@/components/layout/WebLayout";
 
-const mockCases = [
-  {
-    id: "1",
-    title: "شكوى فصل تعسفي",
-    category: "العمل",
-    status: "reviewing" as const,
-    date: "2024-01-15",
-  },
-  {
-    id: "2",
-    title: "استرداد مبلغ مشتريات",
-    category: "التجارة الإلكترونية",
-    status: "sent" as const,
-    date: "2024-01-10",
-  },
-  {
-    id: "3",
-    title: "نزاع عقد إيجار",
-    category: "العقارات",
-    status: "closed" as const,
-    date: "2023-12-20",
-  },
+const notifications = [
+  { id: 1, text: "تم تحديث حالة قضية تأخر الراتب", time: "منذ ساعتين" },
+  { id: 2, text: "تم استلام رد من وزارة الموارد البشرية", time: "منذ يوم" },
 ];
 
-const mockNotifications = [
-  { id: "1", text: "تم تحديث حالة قضيتك رقم #1234", time: "منذ ساعة" },
-  { id: "2", text: "تم استلام ردك على الشكوى", time: "منذ يومين" },
+const cases = [
+  { id: 1, title: "تأخر صرف الراتب", category: "العمل", status: "قيد المراجعة", statusType: "pending", date: "2024-01-15" },
+  { id: 2, title: "نزاع إيجار", category: "السكن", status: "تم الإرسال", statusType: "sent", date: "2024-01-10" },
+  { id: 3, title: "شكوى منتج معيب", category: "التجارة الإلكترونية", status: "مغلقة", statusType: "closed", date: "2024-01-05" },
 ];
+
+const getStatusColor = (statusType: string) => {
+  switch (statusType) {
+    case "pending": return "bg-warning/10 text-warning";
+    case "sent": return "bg-primary/10 text-primary";
+    default: return "bg-muted text-muted-foreground";
+  }
+};
+
+const getStatusIcon = (statusType: string) => {
+  switch (statusType) {
+    case "pending": return Clock;
+    case "sent": return AlertCircle;
+    case "closed": return CheckCircle2;
+    default: return FileText;
+  }
+};
 
 export default function MyCases() {
   return (
-    <PageLayout title="قضاياي">
-      <div className="space-y-6">
-        {/* Notifications */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="space-y-3"
-        >
-          <div className="flex items-center gap-2">
-            <Bell className="h-5 w-5 text-primary" />
-            <h2 className="font-semibold text-foreground">الإشعارات</h2>
-            <Badge className="bg-primary text-primary-foreground">{mockNotifications.length}</Badge>
+    <WebLayout>
+      <div className="max-w-4xl mx-auto space-y-8" dir="rtl">
+        <div className="text-center">
+          <h1 className="text-3xl font-bold text-foreground">قضاياتي</h1>
+          <p className="text-muted-foreground mt-2">تابع جميع قضاياك وتحديثاتها</p>
+        </div>
+
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="bg-card rounded-2xl p-6 border border-border">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center"><Bell className="w-5 h-5 text-primary" /></div>
+            <h2 className="text-lg font-bold text-card-foreground">آخر التحديثات</h2>
+            <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded-full">{notifications.length}</span>
           </div>
-          <div className="space-y-2">
-            {mockNotifications.map((notification) => (
-              <div
-                key={notification.id}
-                className="rounded-lg bg-accent/50 p-3 text-sm"
-              >
-                <p className="text-foreground">{notification.text}</p>
-                <p className="mt-1 text-xs text-muted">{notification.time}</p>
+          <div className="space-y-3">
+            {notifications.map((n) => (
+              <div key={n.id} className="flex items-center justify-between p-3 bg-background rounded-lg">
+                <span className="text-card-foreground">{n.text}</span>
+                <span className="text-xs text-muted-foreground">{n.time}</span>
               </div>
             ))}
           </div>
         </motion.div>
 
-        {/* Cases List */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="space-y-3"
-        >
-          <h2 className="font-semibold text-foreground">جميع القضايا</h2>
-          <div className="space-y-3">
-            {mockCases.map((caseItem, index) => (
-              <motion.div
-                key={caseItem.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + index * 0.1 }}
-              >
-                <CaseCard {...caseItem} />
-              </motion.div>
-            ))}
+        <div className="space-y-4">
+          <h2 className="text-xl font-bold text-foreground">جميع القضايا</h2>
+          <div className="grid gap-4">
+            {cases.map((c, i) => {
+              const Icon = getStatusIcon(c.statusType);
+              return (
+                <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                  className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors cursor-pointer group">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-bold text-card-foreground">{c.title}</h3>
+                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">{c.category}</span>
+                      </div>
+                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                        <span className={`flex items-center gap-1 px-2 py-1 rounded ${getStatusColor(c.statusType)}`}><Icon className="w-3 h-3" />{c.status}</span>
+                        <span>آخر تحديث: {new Date(c.date).toLocaleDateString("ar-SA")}</span>
+                      </div>
+                    </div>
+                    <ChevronLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                  </div>
+                </motion.div>
+              );
+            })}
           </div>
-        </motion.div>
-
-        {/* Empty State */}
-        {mockCases.length === 0 && (
-          <div className="py-12 text-center">
-            <p className="text-muted">لا توجد قضايا حتى الآن</p>
-          </div>
-        )}
+        </div>
       </div>
-    </PageLayout>
+    </WebLayout>
   );
 }

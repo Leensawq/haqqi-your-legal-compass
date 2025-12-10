@@ -1,26 +1,25 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useAuth } from "@/contexts/AuthContext";
 import haqqiLogo from "@/assets/haqqi-logo.png";
 
 type Step = "national-id" | "nafath-sent" | "otp";
 
 export default function Login() {
-  const navigate = useNavigate();
+  const { login } = useAuth();
   const [step, setStep] = useState<Step>("national-id");
   const [nationalId, setNationalId] = useState("");
   const [otp, setOtp] = useState("");
 
   const handleContinue = () => {
-    // Manual login with ID 1122334455
     if (step === "national-id" && nationalId === "1122334455") {
       setStep("nafath-sent");
       setTimeout(() => setStep("otp"), 2000);
-    } else if (step === "otp" && otp.length === 4) {
-      navigate("/");
+    } else if (step === "otp" && otp.length === 6) {
+      login(nationalId);
     }
   };
 
@@ -46,32 +45,28 @@ export default function Login() {
                 exit={{ opacity: 0, x: -20 }}
                 className="space-y-8"
               >
-                {/* Header */}
                 <div className="text-right space-y-2">
                   <h1 className="text-2xl lg:text-3xl font-bold text-card-foreground">
-                    تسجيل الدخول
+                    تسجيل الدخول عبر الهوية الوطنية
                   </h1>
                   <p className="text-muted-foreground text-sm lg:text-base">
                     للمواطن السعودي أو المقيم الذي يحمل إقامة سعودية
                   </p>
                 </div>
 
-                {/* Nafath Logo */}
                 <div className="flex justify-center py-8">
                   <h2 className="text-5xl lg:text-7xl font-bold text-primary" style={{ fontFamily: 'Arial, sans-serif' }}>
                     نفاذ
                   </h2>
                 </div>
 
-                {/* Description */}
                 <p className="text-muted-foreground text-sm lg:text-base text-right leading-relaxed">
                   يمكن الدخول عن طريق "أبشر" من خلال بوابة النفاذ الوطني الموحد لتستفيد من الخدمات الإلكترونية المقدمة من منصة حَقّي
                 </p>
 
-                {/* Input Field */}
                 <div className="space-y-3">
                   <label className="block text-right text-sm font-semibold text-card-foreground">
-                    رقم بطاقة الأحوال/الإقامة
+                    رقم الهوية الوطنية
                   </label>
                   <div className="relative">
                     <Input
@@ -93,14 +88,13 @@ export default function Login() {
                   </p>
                 </div>
 
-                {/* Login Button */}
                 <Button
                   onClick={handleContinue}
                   disabled={nationalId !== "1122334455"}
                   className="w-full py-6 text-lg font-semibold rounded-lg"
                   size="lg"
                 >
-                  تسجيل الدخول
+                  متابعة
                 </Button>
               </motion.div>
             )}
@@ -123,7 +117,7 @@ export default function Login() {
                     تم إرسال طلب تسجيل الدخول عبر نفاذ
                   </h2>
                   <p className="text-muted-foreground text-sm">
-                    يرجى التحقق من تطبيق نفاذ على جوالك
+                    الرجاء إدخال رمز التحقق
                   </p>
                 </div>
                 <div className="flex justify-center gap-2">
@@ -159,23 +153,23 @@ export default function Login() {
                     أدخل رمز التحقق
                   </h1>
                   <p className="text-muted-foreground text-sm">
-                    تم إرسال رمز التحقق إلى جوالك
+                    تم إرسال طلب تسجيل الدخول عبر نفاذ، الرجاء إدخال رمز التحقق
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   <Input
                     type="text"
-                    placeholder="----"
+                    placeholder="------"
                     value={otp}
-                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 4))}
-                    className="text-center text-2xl tracking-[1rem] bg-background border-border text-card-foreground py-6"
+                    onChange={(e) => setOtp(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                    className="text-center text-2xl tracking-[0.75rem] bg-background border-border text-card-foreground py-6"
                     dir="ltr"
                   />
 
                   <Button
                     onClick={handleContinue}
-                    disabled={otp.length !== 4}
+                    disabled={otp.length !== 6}
                     className="w-full py-6 text-lg font-semibold"
                     size="lg"
                   >
@@ -196,22 +190,19 @@ export default function Login() {
       <div className="hidden lg:flex flex-1 bg-primary relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary/80" />
         <div className="relative z-10 flex flex-col justify-between p-16 text-primary-foreground w-full">
-          {/* Logo */}
           <div className="flex justify-end">
             <img src={haqqiLogo} alt="حَقّي" className="h-16 w-auto" />
           </div>
 
-          {/* Main Content */}
           <div className="text-right space-y-6">
             <h2 className="text-4xl xl:text-5xl font-bold leading-tight">
-              منصة حَقّي للحقوق القانونية
+              منصّة حَقّي لمساعدتك في مواقفك القانونية
             </h2>
             <p className="text-lg xl:text-xl opacity-90 leading-relaxed max-w-lg mr-auto">
               منصة حَقّي هي منصتك الموثوقة لفهم حقوقك القانونية وتحليل وضعك وإنشاء الخطابات الرسمية
             </p>
           </div>
 
-          {/* Footer */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="w-10 h-10 rounded-full bg-primary-foreground/20 flex items-center justify-center hover:bg-primary-foreground/30 transition-colors cursor-pointer">
@@ -222,7 +213,7 @@ export default function Login() {
               </div>
             </div>
             <p className="text-sm opacity-75">
-              جميع الحقوق محفوظة لمنصة حَقّي @ 2024
+              جميع الحقوق محفوظة لمنصة حَقّي © 2024
             </p>
           </div>
         </div>
