@@ -44,46 +44,46 @@ export default function NewCase() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="bg-card rounded-2xl p-6 md:p-8 shadow-lg border border-border"
+            className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-border"
           >
             <div className="space-y-6">
               {/* Situation Textarea */}
               <div className="space-y-3">
-                <label className="block text-sm font-semibold text-card-foreground">
+                <label className="block text-sm font-semibold text-gray-800">
                   وصف الموقف
                 </label>
                 <Textarea
                   value={situation}
                   onChange={(e) => setSituation(e.target.value)}
                   placeholder="مثال: لم أستلم راتبي لمدة ٣ شهور من صاحب العمل رغم مطالبتي المتكررة..."
-                  className="min-h-[200px] text-base bg-background border-border text-card-foreground resize-none"
+                  className="min-h-[200px] text-base bg-white border-gray-300 text-gray-900 resize-none placeholder:text-gray-400"
                   dir="rtl"
                 />
               </div>
 
               {/* Attachments */}
               <div className="space-y-3">
-                <label className="block text-sm font-semibold text-card-foreground">
+                <label className="block text-sm font-semibold text-gray-800">
                   المرفقات (اختياري)
                 </label>
                 <div className="grid grid-cols-3 gap-3">
                   <Button
                     variant="outline"
-                    className="flex flex-col items-center gap-2 py-6 h-auto"
+                    className="flex flex-col items-center gap-2 py-6 h-auto bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   >
                     <FileText className="w-6 h-6" />
                     <span className="text-xs">مستند PDF</span>
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex flex-col items-center gap-2 py-6 h-auto"
+                    className="flex flex-col items-center gap-2 py-6 h-auto bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   >
                     <Image className="w-6 h-6" />
                     <span className="text-xs">صورة</span>
                   </Button>
                   <Button
                     variant="outline"
-                    className="flex flex-col items-center gap-2 py-6 h-auto"
+                    className="flex flex-col items-center gap-2 py-6 h-auto bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
                   >
                     <Upload className="w-6 h-6" />
                     <span className="text-xs">رفع ملف</span>
@@ -92,8 +92,8 @@ export default function NewCase() {
               </div>
 
               {/* OCR Toggle */}
-              <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border">
-                <label className="text-sm font-medium text-foreground">
+              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
+                <label className="text-sm font-medium text-gray-800">
                   تفعيل قراءة النصوص من المرفقات (OCR)
                 </label>
                 <Switch checked={ocrEnabled} onCheckedChange={setOcrEnabled} />
