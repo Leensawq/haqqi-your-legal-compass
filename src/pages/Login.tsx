@@ -1,20 +1,27 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, ChevronRight } from "lucide-react";
+import { Globe, ChevronRight, User, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useAuth } from "@/contexts/AuthContext";
 import haqqiLogo from "@/assets/haqqi-logo.png";
 
-type Step = "national-id" | "nafath-sent" | "otp";
+type LoginMethod = "nafath" | "email-mobile";
+type NafathStep = "national-id" | "nafath-sent" | "otp";
 
 export default function Login() {
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-  const [step, setStep] = useState<Step>("national-id");
+  const [loginMethod, setLoginMethod] = useState<LoginMethod>("nafath");
+  const [nafathStep, setNafathStep] = useState<NafathStep>("national-id");
   const [nationalId, setNationalId] = useState("");
   const [otp, setOtp] = useState("");
+  
+  // Email/Mobile fields
+  const [fullName, setFullName] = useState("");
+  const [mobile, setMobile] = useState("");
+  const [email, setEmail] = useState("");
 
   // Redirect authenticated users to /home
   useEffect(() => {
@@ -23,12 +30,18 @@ export default function Login() {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleContinue = () => {
-    if (step === "national-id" && nationalId === "1122334455") {
-      setStep("nafath-sent");
-      setTimeout(() => setStep("otp"), 2000);
-    } else if (step === "otp" && otp.length === 6) {
+  const handleNafathContinue = () => {
+    if (nafathStep === "national-id" && nationalId === "1122334455") {
+      setNafathStep("nafath-sent");
+      setTimeout(() => setNafathStep("otp"), 2000);
+    } else if (nafathStep === "otp" && otp.length === 6) {
       login(nationalId);
+    }
+  };
+
+  const handleEmailMobileContinue = () => {
+    if (fullName.trim() && mobile.trim() && email.trim()) {
+      login(email);
     }
   };
 
@@ -57,8 +70,36 @@ export default function Login() {
           </button>
         </div>
 
+        {/* Login Method Tabs */}
+        <div className="flex gap-2 mb-6">
+          <button
+            onClick={() => {
+              setLoginMethod("nafath");
+              setNafathStep("national-id");
+            }}
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all ${
+              loginMethod === "nafath"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            الدخول بنفاذ
+          </button>
+          <button
+            onClick={() => setLoginMethod("email-mobile")}
+            className={`flex-1 py-3 px-4 rounded-lg text-sm font-semibold transition-all ${
+              loginMethod === "email-mobile"
+                ? "bg-primary text-primary-foreground"
+                : "bg-muted text-muted-foreground hover:bg-muted/80"
+            }`}
+          >
+            تسجيل بدون نفاذ
+          </button>
+        </div>
+
         <AnimatePresence mode="wait">
-          {step === "national-id" && (
+          {/* Nafath Login Flow */}
+          {loginMethod === "nafath" && nafathStep === "national-id" && (
             <motion.div
               key="national-id"
               initial={{ opacity: 0, x: 20 }}
@@ -111,7 +152,7 @@ export default function Login() {
               </div>
 
               <Button
-                onClick={handleContinue}
+                onClick={handleNafathContinue}
                 disabled={nationalId !== "1122334455"}
                 className="w-full py-6 text-lg font-semibold rounded-lg"
                 size="lg"
@@ -121,7 +162,7 @@ export default function Login() {
             </motion.div>
           )}
 
-          {step === "nafath-sent" && (
+          {loginMethod === "nafath" && nafathStep === "nafath-sent" && (
             <motion.div
               key="nafath-sent"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -154,7 +195,7 @@ export default function Login() {
             </motion.div>
           )}
 
-          {step === "otp" && (
+          {loginMethod === "nafath" && nafathStep === "otp" && (
             <motion.div
               key="otp"
               initial={{ opacity: 0, x: 20 }}
@@ -163,7 +204,7 @@ export default function Login() {
               className="space-y-6"
             >
               <button
-                onClick={() => setStep("national-id")}
+                onClick={() => setNafathStep("national-id")}
                 className="flex items-center gap-1 text-primary hover:text-primary/80 transition-colors"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -190,7 +231,7 @@ export default function Login() {
                 />
 
                 <Button
-                  onClick={handleContinue}
+                  onClick={handleNafathContinue}
                   disabled={otp.length !== 6}
                   className="w-full py-6 text-lg font-semibold"
                   size="lg"
@@ -202,6 +243,97 @@ export default function Login() {
                   إعادة إرسال الرمز
                 </button>
               </div>
+            </motion.div>
+          )}
+
+          {/* Email/Mobile Login Flow */}
+          {loginMethod === "email-mobile" && (
+            <motion.div
+              key="email-mobile"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6"
+            >
+              <div className="text-center space-y-2">
+                <h1 className="text-2xl font-bold text-card-foreground">
+                  تسجيل الدخول بدون نفاذ
+                </h1>
+                <p className="text-muted-foreground text-sm">
+                  أدخل بياناتك للمتابعة
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {/* Full Name */}
+                <div className="space-y-2">
+                  <label className="block text-right text-sm font-semibold text-card-foreground">
+                    الاسم الكامل
+                  </label>
+                  <div className="relative">
+                    <Input
+                      type="text"
+                      placeholder="أدخل اسمك الكامل"
+                      value={fullName}
+                      onChange={(e) => setFullName(e.target.value)}
+                      className="text-right text-base py-6 px-4 pr-12 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                      dir="rtl"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <User className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Mobile Number */}
+                <div className="space-y-2">
+                  <label className="block text-right text-sm font-semibold text-card-foreground">
+                    رقم الجوال
+                  </label>
+                  <div className="relative">
+                    <Input
+                      type="tel"
+                      placeholder="05xxxxxxxx"
+                      value={mobile}
+                      onChange={(e) => setMobile(e.target.value.replace(/\D/g, "").slice(0, 10))}
+                      className="text-right text-base py-6 px-4 pr-12 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                      dir="rtl"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Phone className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email */}
+                <div className="space-y-2">
+                  <label className="block text-right text-sm font-semibold text-card-foreground">
+                    البريد الإلكتروني
+                  </label>
+                  <div className="relative">
+                    <Input
+                      type="email"
+                      placeholder="example@email.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      className="text-right text-base py-6 px-4 pr-12 bg-background border-border text-foreground placeholder:text-muted-foreground"
+                      dir="rtl"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                      <Mail className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                onClick={handleEmailMobileContinue}
+                disabled={!fullName.trim() || !mobile.trim() || !email.trim()}
+                className="w-full py-6 text-lg font-semibold rounded-lg"
+                size="lg"
+              >
+                متابعة
+              </Button>
             </motion.div>
           )}
         </AnimatePresence>
