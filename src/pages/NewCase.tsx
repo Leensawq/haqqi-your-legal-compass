@@ -93,7 +93,7 @@ export default function NewCase() {
 
               {/* OCR Toggle */}
               <div className="flex items-center justify-between p-4 bg-background rounded-lg border border-border">
-                <label className="text-sm font-medium text-card-foreground">
+                <label className="text-sm font-medium text-foreground">
                   تفعيل قراءة النصوص من المرفقات (OCR)
                 </label>
                 <Switch checked={ocrEnabled} onCheckedChange={setOcrEnabled} />
