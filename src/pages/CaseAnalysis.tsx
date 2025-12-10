@@ -7,7 +7,6 @@ import {
   Download, ExternalLink, Plus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
 import { WebLayout } from "@/components/layout/WebLayout";
 
 type AnalysisStep = "analyzing" | "legal-right" | "official-steps" | "checklist" | "success";
@@ -53,7 +52,6 @@ export default function CaseAnalysis() {
         });
       }, 100);
 
-      // Animate source checking
       legalSources.forEach((_, index) => {
         setTimeout(() => {
           setCheckedSources((prev) => {
@@ -72,7 +70,7 @@ export default function CaseAnalysis() {
 
   return (
     <WebLayout>
-      <div className="max-w-4xl mx-auto" dir="rtl">
+      <div className="w-full" dir="rtl">
         <AnimatePresence mode="wait">
           {/* Step 1: Analyzing */}
           {step === "analyzing" && (
@@ -84,41 +82,47 @@ export default function CaseAnalysis() {
               className="space-y-8"
             >
               <div className="text-center space-y-4">
-                <h1 className="text-3xl font-bold text-foreground">جاري تحليل حالتك...</h1>
-                <p className="text-muted-foreground">نقوم بمراجعة الأنظمة واللوائح ذات الصلة</p>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">جاري تحليل حالتك...</h1>
+                <p className="text-lg text-foreground/70">نقوم بمراجعة الأنظمة واللوائح ذات الصلة</p>
               </div>
 
-              {/* Progress Bar */}
-              <div className="bg-card rounded-2xl p-8 border border-border">
-                <Progress value={progress} className="h-3 mb-6" />
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span className={progress >= 33 ? "text-primary font-medium" : ""}>بحث</span>
-                  <span className={progress >= 66 ? "text-primary font-medium" : ""}>تحليل</span>
-                  <span className={progress >= 100 ? "text-primary font-medium" : ""}>جاهز</span>
+              {/* Progress Bar - RTL Direction */}
+              <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50">
+                <div className="relative h-4 bg-background/30 rounded-full overflow-hidden mb-6">
+                  <div 
+                    className="absolute top-0 right-0 h-full bg-primary rounded-full transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                {/* RTL Progress Labels: بحث → تحليل → جاهز (right to left visually) */}
+                <div className="flex justify-between text-base font-medium">
+                  <span className={`transition-colors ${progress >= 100 ? "text-primary font-bold" : "text-foreground/50"}`}>جاهز</span>
+                  <span className={`transition-colors ${progress >= 50 && progress < 100 ? "text-primary font-bold" : "text-foreground/50"}`}>تحليل</span>
+                  <span className={`transition-colors ${progress > 0 && progress < 50 ? "text-primary font-bold" : progress >= 50 ? "text-primary" : "text-foreground/50"}`}>بحث</span>
                 </div>
               </div>
 
               {/* Legal Sources */}
-              <div className="bg-card rounded-2xl p-8 border border-border space-y-4">
-                <h3 className="font-semibold text-card-foreground mb-4">المصادر القانونية</h3>
+              <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50 space-y-4">
+                <h3 className="text-xl font-bold text-foreground mb-6">المصادر القانونية</h3>
                 {legalSources.map((source, index) => (
                   <motion.div
                     key={source.name}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.3 }}
-                    className="flex items-center gap-3 p-3 bg-background rounded-lg"
+                    className="flex items-center gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors"
                   >
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center transition-colors ${
-                      checkedSources[index] ? "bg-primary" : "bg-muted"
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+                      checkedSources[index] ? "bg-primary" : "bg-muted/50"
                     }`}>
                       {checkedSources[index] ? (
-                        <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
+                        <CheckCircle2 className="w-5 h-5 text-primary-foreground" />
                       ) : (
-                        <Search className="w-3 h-3 text-muted-foreground" />
+                        <Search className="w-4 h-4 text-foreground/50" />
                       )}
                     </div>
-                    <span className="text-card-foreground">{source.name}</span>
+                    <span className="text-lg text-foreground">{source.name}</span>
                   </motion.div>
                 ))}
               </div>
@@ -134,48 +138,48 @@ export default function CaseAnalysis() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
-              <div className="bg-card rounded-2xl p-8 border border-border">
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <Scale className="w-6 h-6 text-primary" />
+              <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50">
+                <div className="flex items-center gap-4 mb-8">
+                  <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <Scale className="w-7 h-7 text-primary" />
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold text-card-foreground">حقك القانوني</h2>
-                    <p className="text-sm text-muted-foreground">نظام العمل السعودي – المادة 90</p>
+                    <h2 className="text-2xl lg:text-3xl font-bold text-foreground">حقك القانوني</h2>
+                    <p className="text-base text-primary">نظام العمل السعودي – المادة 90</p>
                   </div>
                 </div>
 
-                <div className="space-y-4 text-card-foreground">
-                  <p className="text-lg leading-relaxed">
+                <div className="space-y-4">
+                  <p className="text-xl text-foreground leading-relaxed">
                     بناءً على نظام العمل السعودي، لديك الحق في:
                   </p>
                   <ul className="space-y-3 list-none">
-                    <li className="flex items-start gap-3 p-3 bg-background rounded-lg">
-                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5" />
-                      <span>استلام راتبك كاملاً في موعده المحدد</span>
+                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
+                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-lg text-foreground">استلام راتبك كاملاً في موعده المحدد</span>
                     </li>
-                    <li className="flex items-start gap-3 p-3 bg-background rounded-lg">
-                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5" />
-                      <span>تقديم شكوى لدى مكتب العمل في حال التأخير</span>
+                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
+                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-lg text-foreground">تقديم شكوى لدى مكتب العمل في حال التأخير</span>
                     </li>
-                    <li className="flex items-start gap-3 p-3 bg-background rounded-lg">
-                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5" />
-                      <span>المطالبة بالتعويض عن الأضرار الناتجة عن التأخير</span>
+                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
+                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-lg text-foreground">المطالبة بالتعويض عن الأضرار الناتجة عن التأخير</span>
                     </li>
-                    <li className="flex items-start gap-3 p-3 bg-background rounded-lg">
-                      <CheckCircle2 className="w-5 h-5 text-primary mt-0.5" />
-                      <span>إنهاء العقد بدون إشعار في حال التأخر أكثر من 60 يوماً</span>
+                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
+                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
+                      <span className="text-lg text-foreground">إنهاء العقد بدون إشعار في حال التأخر أكثر من 60 يوماً</span>
                     </li>
                   </ul>
                 </div>
               </div>
 
               <div className="flex gap-4">
-                <Button variant="outline" className="flex-1 py-6" onClick={() => navigate("/home")}>
-                  <ChevronLeft className="w-4 h-4 ml-2" />
+                <Button variant="outline" className="flex-1 py-6 text-lg border-border/50 text-foreground hover:bg-primary/20 hover:text-primary hover:border-primary" onClick={() => navigate("/home")}>
+                  <ChevronLeft className="w-5 h-5 ml-2" />
                   الرئيسية
                 </Button>
-                <Button className="flex-1 py-6" onClick={() => setStep("official-steps")}>
+                <Button className="flex-1 py-6 text-lg" onClick={() => setStep("official-steps")}>
                   الخطوات الرسمية
                 </Button>
               </div>
@@ -189,11 +193,11 @@ export default function CaseAnalysis() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
+              className="space-y-8"
             >
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-foreground">الخطوات الرسمية</h1>
-                <p className="text-muted-foreground mt-2">اتبع هذه الخطوات لتقديم شكواك</p>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">الخطوات الرسمية</h1>
+                <p className="text-lg text-foreground/70 mt-2">اتبع هذه الخطوات لتقديم شكواك</p>
               </div>
 
               <div className="space-y-4">
@@ -203,14 +207,14 @@ export default function CaseAnalysis() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className="bg-card rounded-xl p-6 border border-border flex items-start gap-4"
+                    className="bg-secondary/30 rounded-xl p-6 border border-border/50 flex items-start gap-5 hover:bg-secondary/50 hover:border-primary/30 transition-all cursor-default"
                   >
-                    <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary-foreground font-bold">{item.number}</span>
+                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                      <span className="text-primary-foreground font-bold text-lg">{item.number}</span>
                     </div>
                     <div>
-                      <h3 className="font-bold text-card-foreground mb-1">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground">{item.description}</p>
+                      <h3 className="font-bold text-lg text-foreground mb-1">{item.title}</h3>
+                      <p className="text-base text-foreground/70">{item.description}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -229,20 +233,25 @@ export default function CaseAnalysis() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
-              className="space-y-6"
+              className="space-y-8"
             >
               <div className="text-center mb-8">
-                <h1 className="text-3xl font-bold text-foreground">قائمة التحقق قبل التقديم</h1>
-                <p className="text-muted-foreground mt-2">تأكد من توفر جميع المستندات المطلوبة</p>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">قائمة التحقق قبل التقديم</h1>
+                <p className="text-lg text-foreground/70 mt-2">تأكد من توفر جميع المستندات المطلوبة</p>
               </div>
 
               {/* Progress */}
-              <div className="bg-card rounded-xl p-6 border border-border">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-sm text-muted-foreground">تقدم التحقق</span>
-                  <span className="text-sm font-medium text-card-foreground">{completedItems} من {checklistItems.length}</span>
+              <div className="bg-secondary/30 rounded-xl p-6 border border-border/50">
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-base text-foreground/70">تقدم التحقق</span>
+                  <span className="text-base font-bold text-primary">{completedItems} من {checklistItems.length}</span>
                 </div>
-                <Progress value={(completedItems / checklistItems.length) * 100} className="h-2" />
+                <div className="relative h-3 bg-background/30 rounded-full overflow-hidden">
+                  <div 
+                    className="absolute top-0 right-0 h-full bg-primary rounded-full transition-all duration-300"
+                    style={{ width: `${(completedItems / checklistItems.length) * 100}%` }}
+                  />
+                </div>
               </div>
 
               {/* Checklist Items */}
@@ -253,22 +262,22 @@ export default function CaseAnalysis() {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
-                    className={`bg-card rounded-xl p-5 border flex items-center gap-4 ${
-                      item.status === "complete" ? "border-primary/50" : "border-border"
+                    className={`bg-secondary/30 rounded-xl p-5 border flex items-center gap-4 hover:bg-secondary/50 transition-all cursor-default ${
+                      item.status === "complete" ? "border-primary/50" : "border-border/50"
                     }`}
                   >
-                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${
-                      item.status === "complete" ? "bg-primary/10" : "bg-muted/50"
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
+                      item.status === "complete" ? "bg-primary/20" : "bg-background/20"
                     }`}>
-                      <item.icon className={`w-6 h-6 ${
-                        item.status === "complete" ? "text-primary" : "text-muted-foreground"
+                      <item.icon className={`w-7 h-7 ${
+                        item.status === "complete" ? "text-primary" : "text-foreground/50"
                       }`} />
                     </div>
-                    <span className="flex-1 font-medium text-card-foreground">{item.title}</span>
+                    <span className="flex-1 font-medium text-lg text-foreground">{item.title}</span>
                     {item.status === "complete" ? (
-                      <CheckCircle2 className="w-6 h-6 text-primary" />
+                      <CheckCircle2 className="w-7 h-7 text-primary" />
                     ) : (
-                      <div className="w-6 h-6 rounded-full border-2 border-muted" />
+                      <div className="w-7 h-7 rounded-full border-2 border-foreground/30" />
                     )}
                   </motion.div>
                 ))}
@@ -294,32 +303,32 @@ export default function CaseAnalysis() {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ type: "spring", delay: 0.2 }}
-                  className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6"
+                  className="w-28 h-28 rounded-full bg-primary/20 flex items-center justify-center mx-auto mb-6"
                 >
-                  <CheckCircle2 className="w-12 h-12 text-primary" />
+                  <CheckCircle2 className="w-14 h-14 text-primary" />
                 </motion.div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">حالتك جاهزة بالكامل</h1>
-                <p className="text-muted-foreground">تم إعداد جميع المستندات والخطوات اللازمة</p>
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">حالتك جاهزة بالكامل</h1>
+                <p className="text-lg text-foreground/70">تم إعداد جميع المستندات والخطوات اللازمة</p>
               </div>
 
               <div className="space-y-4">
-                <div className="bg-card rounded-xl p-5 border border-primary/50 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileCheck className="w-5 h-5 text-primary" />
+                <div className="bg-secondary/30 rounded-xl p-5 border border-primary/50 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <FileCheck className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="text-card-foreground">تم تحليل الحالة وفق المادة 90</span>
+                  <span className="text-lg text-foreground">تم تحليل الحالة وفق المادة 90</span>
                 </div>
-                <div className="bg-card rounded-xl p-5 border border-primary/50 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <FileText className="w-5 h-5 text-primary" />
+                <div className="bg-secondary/30 rounded-xl p-5 border border-primary/50 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <FileText className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="text-card-foreground">تم إعداد خطاب الشكوى</span>
+                  <span className="text-lg text-foreground">تم إعداد خطاب الشكوى</span>
                 </div>
-                <div className="bg-card rounded-xl p-5 border border-primary/50 flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-primary" />
+                <div className="bg-secondary/30 rounded-xl p-5 border border-primary/50 flex items-center gap-4 hover:bg-secondary/50 transition-colors">
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <CheckCircle2 className="w-6 h-6 text-primary" />
                   </div>
-                  <span className="text-card-foreground">تم تجهيز قائمة المستندات الرسمية</span>
+                  <span className="text-lg text-foreground">تم تجهيز قائمة المستندات الرسمية</span>
                 </div>
               </div>
 
@@ -328,16 +337,16 @@ export default function CaseAnalysis() {
                   <Download className="w-5 h-5 ml-2" />
                   تحميل الخطاب والمستندات
                 </Button>
-                <Button variant="outline" className="w-full py-6 text-lg" size="lg">
+                <Button variant="outline" className="w-full py-6 text-lg border-border/50 text-foreground hover:bg-primary/20 hover:text-primary hover:border-primary" size="lg">
                   <ExternalLink className="w-5 h-5 ml-2" />
                   الانتقال لمنصة البلاغات
                 </Button>
                 <Button 
                   variant="ghost" 
-                  className="w-full py-4"
+                  className="w-full py-4 text-primary hover:bg-primary/10"
                   onClick={() => navigate("/new-case")}
                 >
-                  <Plus className="w-4 h-4 ml-2" />
+                  <Plus className="w-5 h-5 ml-2" />
                   حل موقف آخر
                 </Button>
               </div>
