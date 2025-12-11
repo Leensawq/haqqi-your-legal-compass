@@ -20,35 +20,27 @@ export function HeroSection() {
             initial={{ opacity: 0, x: 20 }} 
             animate={{ opacity: 1, x: 0 }} 
             transition={{ duration: 0.6 }}
-            className="text-right order-1 flex flex-col gap-5"
+            className="text-right order-1 flex flex-col items-center lg:items-end"
           >
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground leading-tight text-center lg:text-right">
               منصّة حَقّي لمساعدتك في مواقفك القانونية
             </h1>
             
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mr-0 ml-auto lg:ml-0">
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mt-5 text-center lg:text-right">
               نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة
             </p>
             
-            {/* CTA Area */}
-            <div className="flex flex-col items-end gap-3">
-              <Button 
-                onClick={() => navigate("/new-case")} 
-                size="lg" 
-                className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
-              >
-                أدخل موقفي الآن
-              </Button>
-              <button 
-                onClick={() => navigate("/new-case?example=true")}
-                className="text-primary text-xs hover:underline transition-all duration-200"
-              >
-                جرّب مثال جاهز لمشكلة قانونية
-              </button>
-            </div>
+            {/* CTA Button */}
+            <Button 
+              onClick={() => navigate("/new-case")} 
+              size="lg" 
+              className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] mt-7"
+            >
+              أدخل موقفي الآن
+            </Button>
 
             {/* Trust badges strip */}
-            <div className="flex flex-wrap justify-end gap-4 sm:gap-6 text-xs text-muted-foreground pt-2">
+            <div className="flex flex-wrap justify-center lg:justify-end gap-4 sm:gap-6 text-xs text-muted-foreground mt-4">
               <div className="flex items-center gap-1.5">
                 <span>يعتمد على الأنظمة السعودية الرسمية</span>
                 <Shield className="w-3.5 h-3.5 text-primary flex-shrink-0" />
