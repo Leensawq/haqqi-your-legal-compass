@@ -127,15 +127,15 @@ export function SpeechToText({ onTranscript, className = "", disabled = false }:
             size="icon"
             onClick={toggleListening}
             disabled={disabled}
-            className={`text-primary hover:text-primary/80 hover:bg-primary/10 ${
+            className={`h-10 w-10 text-primary hover:text-primary/80 hover:bg-primary/10 ${
               isListening ? "bg-primary/20 animate-pulse" : ""
             } ${className}`}
             aria-label={isListening ? "إيقاف التسجيل" : "تحدث الآن"}
           >
             {isListening ? (
-              <MicOff className="h-4 w-4" />
+              <MicOff className="h-6 w-6" />
             ) : (
-              <Mic className="h-4 w-4" />
+              <Mic className="h-6 w-6" />
             )}
           </Button>
         </TooltipTrigger>
