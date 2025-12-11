@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Download, Send, Edit3 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
@@ -9,7 +9,14 @@ import { toast } from "@/hooks/use-toast";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 import { SpeechToText } from "@/components/accessibility/SpeechToText";
 
-const letterTemplate = `السلام عليكم ورحمة الله وبركاته،
+interface ComplaintLetter {
+  recipient: string;
+  subject: string;
+  body: string;
+  legalReference: string;
+}
+
+const defaultLetterTemplate = `السلام عليكم ورحمة الله وبركاته،
 
 إلى سعادة مدير إدارة الموارد البشرية المحترم،
 
@@ -30,8 +37,43 @@ const letterTemplate = `السلام عليكم ورحمة الله وبركات
 
 export default function LetterGeneration() {
   const [recipient, setRecipient] = useState("وزارة الموارد البشرية");
-  const [letterContent, setLetterContent] = useState(letterTemplate);
+  const [letterContent, setLetterContent] = useState(defaultLetterTemplate);
   const [isEditing, setIsEditing] = useState(false);
+
+  // Load AI-generated letter from localStorage
+  useEffect(() => {
+    const storedAnalysis = localStorage.getItem('caseAnalysis');
+    if (storedAnalysis) {
+      try {
+        const analysis = JSON.parse(storedAnalysis);
+        const letter: ComplaintLetter = analysis.complaintLetter;
+        if (letter) {
+          setRecipient(letter.recipient || "وزارة الموارد البشرية");
+          
+          // Build full letter content
+          const fullLetter = `السلام عليكم ورحمة الله وبركاته،
+
+إلى سعادة ${letter.recipient}،
+
+الموضوع: ${letter.subject}
+
+${letter.body}
+
+استناداً إلى: ${letter.legalReference}
+
+وتفضلوا بقبول فائق الاحترام والتقدير،
+
+مقدم الشكوى: [الاسم]
+رقم الهوية: [رقم الهوية]
+التاريخ: ${new Date().toLocaleDateString('ar-SA')}`;
+          
+          setLetterContent(fullLetter);
+        }
+      } catch (e) {
+        console.error('Failed to parse letter:', e);
+      }
+    }
+  }, []);
 
   const handleDownload = () => {
     toast({

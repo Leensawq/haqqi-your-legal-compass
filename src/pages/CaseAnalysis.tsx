@@ -31,19 +31,27 @@ const saudiRegions = [
   "الجوف",
 ];
 
-const legalSources = [
-  { name: "نظام العمل السعودي – المادة 90", checked: false },
-  { name: "لائحة حماية الأجور", checked: false },
-  { name: "أدلة الشكاوى العمالية", checked: false },
-];
-
-const officialSteps = [
-  { number: 1, title: "تقديم شكوى تأخر الأجور عبر خدمة ودي", description: "رفع شكوى رسمية عبر منصة ودي الإلكترونية" },
-  { number: 2, title: "تعبئة بيانات العامل والمنشأة", description: "إدخال جميع البيانات المطلوبة بدقة" },
-  { number: 3, title: "رفع المستندات المطلوبة", description: "إرفاق جميع الوثائق الداعمة للشكوى" },
-  { number: 4, title: "متابعة الرد خلال ٣–٥ أيام عمل", description: "انتظار رد الجهة المختصة" },
-  { number: 5, title: "التصعيد للجنة الخلافات العمالية", description: "في حال عدم الحل الودي" },
-];
+// AI Analysis Interface
+interface AIAnalysis {
+  legalRight: {
+    title: string;
+    reference: string;
+    rights: string[];
+  };
+  legalSources: string[];
+  officialSteps: { number: number; title: string; description: string }[];
+  complaintLetter: {
+    recipient: string;
+    subject: string;
+    body: string;
+    legalReference: string;
+  };
+  responsibleAuthority?: {
+    name: string;
+    contact: string;
+    website: string;
+  };
+}
 
 const initialChecklistItems = [
   { id: 1, title: "عقد العمل", icon: FileText },
@@ -58,9 +66,26 @@ export default function CaseAnalysis() {
   const { user } = useAuth();
   const [step, setStep] = useState<AnalysisStep>("analyzing");
   const [progress, setProgress] = useState(0);
-  const [checkedSources, setCheckedSources] = useState<boolean[]>([false, false, false]);
+  const [checkedSources, setCheckedSources] = useState<boolean[]>([]);
   const [completedItems, setCompletedItems] = useState<Record<number, boolean>>({});
   const [showValidationWarning, setShowValidationWarning] = useState(false);
+
+  // AI Analysis State
+  const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
+
+  // Load analysis from localStorage
+  useEffect(() => {
+    const storedAnalysis = localStorage.getItem('caseAnalysis');
+    if (storedAnalysis) {
+      try {
+        const parsed = JSON.parse(storedAnalysis);
+        setAnalysis(parsed);
+        setCheckedSources(new Array(parsed.legalSources?.length || 0).fill(false));
+      } catch (e) {
+        console.error('Failed to parse analysis:', e);
+      }
+    }
+  }, []);
 
   // Form state with prefill from profile
   const [formData, setFormData] = useState({
@@ -106,7 +131,8 @@ export default function CaseAnalysis() {
   };
 
   useEffect(() => {
-    if (step === "analyzing") {
+    if (step === "analyzing" && analysis) {
+      const sources = analysis.legalSources || [];
       const interval = setInterval(() => {
         setProgress((prev) => {
           if (prev >= 100) {
@@ -118,7 +144,7 @@ export default function CaseAnalysis() {
         });
       }, 100);
 
-      legalSources.forEach((_, index) => {
+      sources.forEach((_, index) => {
         setTimeout(() => {
           setCheckedSources((prev) => {
             const newState = [...prev];
@@ -130,7 +156,7 @@ export default function CaseAnalysis() {
 
       return () => clearInterval(interval);
     }
-  }, [step]);
+  }, [step, analysis]);
 
   
 
@@ -171,9 +197,9 @@ export default function CaseAnalysis() {
               {/* Legal Sources */}
               <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50 space-y-4">
                 <h3 className="text-xl font-bold text-foreground mb-6">المصادر القانونية</h3>
-                {legalSources.map((source, index) => (
+                {(analysis?.legalSources || []).map((source, index) => (
                   <motion.div
-                    key={source.name}
+                    key={source}
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.3 }}
@@ -188,7 +214,7 @@ export default function CaseAnalysis() {
                         <Search className="w-4 h-4 text-foreground/50" />
                       )}
                     </div>
-                    <span className="text-lg text-foreground">{source.name}</span>
+                    <span className="text-lg text-foreground">{source}</span>
                   </motion.div>
                 ))}
               </div>
@@ -211,34 +237,24 @@ export default function CaseAnalysis() {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <h2 className="text-2xl lg:text-3xl font-bold text-foreground">حقك القانوني</h2>
-                      <TextToSpeech text="حقك القانوني. بناءً على نظام العمل السعودي المادة 90، لديك الحق في استلام راتبك كاملاً في موعده المحدد، تقديم شكوى لدى مكتب العمل في حال التأخير، المطالبة بالتعويض عن الأضرار الناتجة عن التأخير، وإنهاء العقد بدون إشعار في حال التأخر أكثر من 60 يوماً." />
+                      <h2 className="text-2xl lg:text-3xl font-bold text-foreground">{analysis?.legalRight?.title || "حقك القانوني"}</h2>
+                      <TextToSpeech text={`${analysis?.legalRight?.title || "حقك القانوني"}. ${analysis?.legalRight?.rights?.join("، ") || ""}`} />
                     </div>
-                    <p className="text-base text-primary">نظام العمل السعودي – المادة 90</p>
+                    <p className="text-base text-primary">{analysis?.legalRight?.reference || ""}</p>
                   </div>
                 </div>
 
                 <div className="space-y-4">
                   <p className="text-xl text-foreground leading-relaxed">
-                    بناءً على نظام العمل السعودي، لديك الحق في:
+                    بناءً على الأنظمة السعودية، لديك الحق في:
                   </p>
                   <ul className="space-y-3 list-none">
-                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
-                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-lg text-foreground">استلام راتبك كاملاً في موعده المحدد</span>
-                    </li>
-                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
-                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-lg text-foreground">تقديم شكوى لدى مكتب العمل في حال التأخير</span>
-                    </li>
-                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
-                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-lg text-foreground">المطالبة بالتعويض عن الأضرار الناتجة عن التأخير</span>
-                    </li>
-                    <li className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
-                      <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
-                      <span className="text-lg text-foreground">إنهاء العقد بدون إشعار في حال التأخر أكثر من 60 يوماً</span>
-                    </li>
+                    {(analysis?.legalRight?.rights || []).map((right, index) => (
+                      <li key={index} className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
+                        <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
+                        <span className="text-lg text-foreground">{right}</span>
+                      </li>
+                    ))}
                   </ul>
                 </div>
               </div>
@@ -270,7 +286,7 @@ export default function CaseAnalysis() {
               </div>
 
               <div className="space-y-4">
-                {officialSteps.map((item, index) => (
+                {(analysis?.officialSteps || []).map((item, index) => (
                   <motion.div
                     key={item.number}
                     initial={{ opacity: 0, x: 20 }}

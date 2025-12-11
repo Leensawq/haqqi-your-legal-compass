@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
@@ -16,6 +16,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
+interface ComplaintLetter {
+  recipient: string;
+  subject: string;
+  body: string;
+  legalReference: string;
+}
+
 export default function ComplaintGenerator() {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -26,7 +33,30 @@ export default function ComplaintGenerator() {
     employerName: "شركة التقنية المتقدمة",
     complaintDetails: "تأخر صرف الراتب لمدة ثلاثة أشهر متتالية",
     legalReference: "المادة 90 من نظام العمل",
+    complaintBody: "",
   });
+
+  // Load AI-generated letter from localStorage
+  useEffect(() => {
+    const storedAnalysis = localStorage.getItem('caseAnalysis');
+    if (storedAnalysis) {
+      try {
+        const analysis = JSON.parse(storedAnalysis);
+        const letter: ComplaintLetter = analysis.complaintLetter;
+        if (letter) {
+          setFormData(prev => ({
+            ...prev,
+            recipientName: letter.recipient || prev.recipientName,
+            complaintDetails: letter.subject || prev.complaintDetails,
+            legalReference: letter.legalReference || prev.legalReference,
+            complaintBody: letter.body || "",
+          }));
+        }
+      } catch (e) {
+        console.error('Failed to parse letter:', e);
+      }
+    }
+  }, []);
 
   const handleDownload = () => {
     toast.success("تم تحميل الملف بنجاح");

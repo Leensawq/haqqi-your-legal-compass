@@ -8,6 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { SpeechToText } from "@/components/accessibility/SpeechToText";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 export default function NewCase() {
   const navigate = useNavigate();
@@ -15,12 +17,33 @@ export default function NewCase() {
   const [ocrEnabled, setOcrEnabled] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleAnalyze = () => {
+  const handleAnalyze = async () => {
     if (!situation.trim()) return;
     setIsLoading(true);
-    setTimeout(() => {
-      navigate("/case-analysis");
-    }, 1000);
+
+    try {
+      const { data, error } = await supabase.functions.invoke('analyze-case', {
+        body: { situation }
+      });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      if (data?.success && data?.analysis) {
+        // Store analysis in localStorage temporarily
+        localStorage.setItem('caseAnalysis', JSON.stringify(data.analysis));
+        localStorage.setItem('caseSituation', situation);
+        navigate("/case-analysis");
+      } else {
+        throw new Error(data?.error || 'حدث خطأ في التحليل');
+      }
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast.error('حدث خطأ في التحليل. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleTranscript = (text: string) => {
