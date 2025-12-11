@@ -25,12 +25,12 @@ const officialSteps = [
   { number: 5, title: "التصعيد للجنة الخلافات العمالية", description: "في حال عدم الحل الودي" },
 ];
 
-const checklistItems = [
-  { id: 1, title: "عقد العمل", icon: FileText, status: "complete" },
-  { id: 2, title: "كشف حساب بنكي آخر ٣ شهور", icon: CreditCard, status: "pending" },
-  { id: 3, title: "الهوية الوطنية", icon: IdCard, status: "complete" },
-  { id: 4, title: "رقم السجل التجاري لصاحب العمل", icon: Building2, status: "pending" },
-  { id: 5, title: "أي إثبات لتأخر الأجر", icon: Receipt, status: "pending" },
+const initialChecklistItems = [
+  { id: 1, title: "عقد العمل", icon: FileText },
+  { id: 2, title: "كشف حساب بنكي آخر ٣ شهور", icon: CreditCard },
+  { id: 3, title: "الهوية الوطنية", icon: IdCard },
+  { id: 4, title: "رقم السجل التجاري لصاحب العمل", icon: Building2 },
+  { id: 5, title: "أي إثبات لتأخر الأجر", icon: Receipt },
 ];
 
 export default function CaseAnalysis() {
@@ -38,6 +38,18 @@ export default function CaseAnalysis() {
   const [step, setStep] = useState<AnalysisStep>("analyzing");
   const [progress, setProgress] = useState(0);
   const [checkedSources, setCheckedSources] = useState<boolean[]>([false, false, false]);
+  const [completedItems, setCompletedItems] = useState<Record<number, boolean>>({});
+
+  const totalItems = initialChecklistItems.length;
+  const completedCount = Object.values(completedItems).filter(Boolean).length;
+  const checklistProgress = (completedCount / totalItems) * 100;
+
+  const toggleItem = (id: number) => {
+    setCompletedItems(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
 
   useEffect(() => {
     if (step === "analyzing") {
@@ -66,7 +78,7 @@ export default function CaseAnalysis() {
     }
   }, [step]);
 
-  const completedItems = checklistItems.filter(item => item.status === "complete").length;
+  
 
   return (
     <WebLayout>
@@ -244,39 +256,43 @@ export default function CaseAnalysis() {
               <div className="bg-secondary/30 rounded-xl p-6 border border-border/50">
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-base text-foreground/70">تقدم التحقق</span>
-                  <span className="text-base font-bold text-primary">{completedItems} من {checklistItems.length}</span>
+                  <span className="text-base font-bold text-primary">{completedCount} من {totalItems}</span>
                 </div>
                 <div className="relative h-3 bg-background/30 rounded-full overflow-hidden">
                   <div 
                     className="absolute top-0 right-0 h-full bg-primary rounded-full transition-all duration-300"
-                    style={{ width: `${(completedItems / checklistItems.length) * 100}%` }}
+                    style={{ width: `${checklistProgress}%` }}
                   />
                 </div>
               </div>
 
               {/* Checklist Items */}
               <div className="space-y-3">
-                {checklistItems.map((item, index) => (
-                  <motion.div
-                    key={item.id}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className={`bg-secondary/30 rounded-xl p-5 border flex items-center gap-4 hover:bg-secondary/50 transition-all cursor-default ${
-                      item.status === "complete" ? "border-primary/50" : "border-border/50"
-                    }`}
-                  >
-                    <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-primary">
-                      <item.icon className="w-7 h-7 text-primary-foreground" />
-                    </div>
-                    <span className="flex-1 font-medium text-lg text-foreground">{item.title}</span>
-                    {item.status === "complete" ? (
-                      <CheckCircle2 className="w-7 h-7 text-primary" />
-                    ) : (
-                      <div className="w-7 h-7 rounded-full border-2 border-foreground/30" />
-                    )}
-                  </motion.div>
-                ))}
+                {initialChecklistItems.map((item, index) => {
+                  const isCompleted = completedItems[item.id] || false;
+                  return (
+                    <motion.div
+                      key={item.id}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={`bg-secondary/30 rounded-xl p-5 border flex items-center gap-4 hover:bg-secondary/50 transition-all cursor-pointer ${
+                        isCompleted ? "border-primary/50" : "border-border/50"
+                      }`}
+                      onClick={() => toggleItem(item.id)}
+                    >
+                      <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-primary">
+                        <item.icon className="w-7 h-7 text-primary-foreground" />
+                      </div>
+                      <span className="flex-1 font-medium text-lg text-foreground">{item.title}</span>
+                      {isCompleted ? (
+                        <CheckCircle2 className="w-7 h-7 text-primary" />
+                      ) : (
+                        <div className="w-7 h-7 rounded-full border-2 border-foreground/30" />
+                      )}
+                    </motion.div>
+                  );
+                })}
               </div>
 
               <Button className="w-full py-6 text-lg" onClick={() => setStep("success")}>
