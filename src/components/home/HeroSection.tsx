@@ -7,30 +7,31 @@ export function HeroSection() {
   const navigate = useNavigate();
 
   return (
-    <section className="relative py-10 lg:py-16 overflow-hidden">
+    <section className="relative py-16 lg:py-20 overflow-hidden">
       {/* Background gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
       
-      <div className="relative max-w-[1250px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+      <div className="relative max-w-[1200px] mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-14 items-center">
           
           {/* Right side - Text content (RTL: appears first) */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }} 
             animate={{ opacity: 1, x: 0 }} 
             transition={{ duration: 0.6 }}
-            className="text-right order-1"
+            className="text-right order-1 flex flex-col gap-5"
           >
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground mb-4 leading-tight">
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
               منصّة حَقّي لمساعدتك في مواقفك القانونية
             </h1>
-            <p className="text-sm md:text-base text-[#E0ECF5] mb-6 leading-relaxed max-w-lg mr-0 ml-auto lg:ml-0">
+            
+            <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mr-0 ml-auto lg:ml-0">
               نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة
             </p>
             
             {/* CTA Area */}
-            <div className="flex flex-col items-end gap-2.5 mb-6">
+            <div className="flex flex-col items-end gap-3">
               <Button 
                 onClick={() => navigate("/new-case")} 
                 size="lg" 
@@ -40,19 +41,19 @@ export function HeroSection() {
               </Button>
               <button 
                 onClick={() => navigate("/new-case?example=true")}
-                className="text-primary text-xs hover:underline transition-all duration-200 flex items-center gap-1"
+                className="text-primary text-xs hover:underline transition-all duration-200"
               >
                 جرّب مثال جاهز لمشكلة قانونية
               </button>
             </div>
 
             {/* Trust badges strip */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1.5 justify-end">
+            <div className="flex flex-wrap justify-end gap-4 sm:gap-6 text-xs text-muted-foreground pt-2">
+              <div className="flex items-center gap-1.5">
                 <span>يعتمد على الأنظمة السعودية الرسمية</span>
                 <Shield className="w-3.5 h-3.5 text-primary flex-shrink-0" />
               </div>
-              <div className="flex items-center gap-1.5 justify-end">
+              <div className="flex items-center gap-1.5">
                 <span>لا يستبدل الاستشارة القانونية المتخصصة</span>
                 <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0" />
               </div>
@@ -68,10 +69,10 @@ export function HeroSection() {
           >
             <div className="relative">
               {/* Main illustration card */}
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-5 lg:p-8 shadow-xl">
-                <div className="flex flex-col items-center gap-4">
+              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-8 shadow-xl min-w-[200px] lg:min-w-[240px]">
+                <div className="flex flex-col items-center gap-5">
                   {/* Icons grid */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 lg:gap-4">
                     <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/20 flex items-center justify-center shadow-md">
                       <Scale className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
                     </div>
@@ -87,7 +88,7 @@ export function HeroSection() {
                   </div>
                   
                   {/* Caption */}
-                  <p className="text-xs text-muted-foreground text-center mt-2 max-w-[180px]">
+                  <p className="text-xs text-muted-foreground text-center px-2">
                     تحليل آلي يعتمد على الأنظمة السعودية
                   </p>
                 </div>
