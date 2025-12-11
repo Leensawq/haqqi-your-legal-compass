@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, BookOpen, Globe, Baby, Accessibility } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
-import { Button } from "@/components/ui/button";
+import { HeroSection } from "@/components/home/HeroSection";
 
 const categories = [
   { icon: Briefcase, title: "حقوق العمل", description: "الرواتب والإجازات والفصل التعسفي" },
@@ -22,11 +22,7 @@ export default function Home() {
   return (
     <WebLayout>
       <div className="space-y-12" dir="rtl">
-        <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-12 lg:py-16">
-          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">منصّة حَقّي لمساعدتك في مواقفك القانونية</h1>
-          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة</p>
-          <Button onClick={() => navigate("/new-case")} size="lg" className="text-xl px-10 py-8 rounded-xl font-bold shadow-lg hover:shadow-xl transition-shadow">أدخل موقفي الآن</Button>
-        </motion.section>
+        <HeroSection />
 
 
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
