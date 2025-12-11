@@ -87,6 +87,10 @@ ${letter.body}
       title: "تم الإرسال",
       description: "تم إرسال الخطاب بنجاح",
     });
+    // Clear case data and navigate to home
+    localStorage.removeItem('caseAnalysis');
+    localStorage.removeItem('caseSituation');
+    window.location.href = '/home';
   };
 
   return (

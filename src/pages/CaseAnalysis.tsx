@@ -33,6 +33,8 @@ const saudiRegions = [
 
 // AI Analysis Interface
 interface AIAnalysis {
+  empathyMessage?: string;
+  isUserRight?: boolean;
   legalRight: {
     title: string;
     reference: string;
@@ -230,6 +232,20 @@ export default function CaseAnalysis() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
+              {/* Empathy Message */}
+              {analysis?.empathyMessage && (
+                <div className={`rounded-2xl p-6 border mb-6 ${
+                  analysis.isUserRight === false 
+                    ? "bg-amber-500/10 border-amber-500/30" 
+                    : "bg-primary/10 border-primary/30"
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <TextToSpeech text={analysis.empathyMessage} />
+                    <p className="text-lg text-foreground leading-relaxed">{analysis.empathyMessage}</p>
+                  </div>
+                </div>
+              )}
+
               <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50">
                 <div className="flex items-center gap-4 mb-8">
                   <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center">
