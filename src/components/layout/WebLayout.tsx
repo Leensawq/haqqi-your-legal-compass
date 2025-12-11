@@ -19,21 +19,21 @@ export function WebLayout({ children }: WebLayoutProps) {
 
   return (
     <div className="min-h-screen bg-background flex flex-col" dir="rtl">
-      {/* Top Navigation - Full Width */}
-      <header className="sticky top-0 z-50 bg-secondary/80 backdrop-blur-md border-b border-border/50 shadow-lg">
-        <div className="w-full px-6 lg:px-12 xl:px-16">
-          <div className="flex items-center justify-between h-16 lg:h-20">
+      {/* Top Navigation - Reduced height */}
+      <header className="sticky top-0 z-50 bg-secondary/80 backdrop-blur-md border-b border-border/50 shadow-md">
+        <div className="max-w-[1250px] mx-auto px-4 lg:px-8">
+          <div className="flex items-center justify-between h-12 lg:h-14">
             {/* Logo - Always navigates to /home */}
             <Link 
               to="/home" 
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <img src={haqqiLogo} alt="حَقّي" className="h-10 lg:h-12 w-auto" />
-              <span className="text-xl lg:text-2xl font-bold text-foreground">حَقّي</span>
+              <img src={haqqiLogo} alt="حَقّي" className="h-8 lg:h-9 w-auto" />
+              <span className="text-base lg:text-lg font-bold text-foreground">حَقّي</span>
             </Link>
 
-            {/* Navigation Links */}
-            <nav className="flex items-center gap-2 lg:gap-4">
+            {/* Navigation Links - Reduced sizes */}
+            <nav className="flex items-center gap-1.5 lg:gap-2">
               {navItems.map((item) => {
                 const isActive = location.pathname === item.path;
                 const Icon = item.icon;
@@ -41,13 +41,13 @@ export function WebLayout({ children }: WebLayoutProps) {
                   <Link
                     key={item.path}
                     to={item.path}
-                    className={`flex items-center gap-2 px-4 lg:px-6 py-2.5 lg:py-3 rounded-xl text-sm lg:text-base font-medium transition-all duration-200 ${
+                    className={`flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-200 ${
                       isActive
-                        ? "bg-primary text-primary-foreground shadow-md"
+                        ? "bg-primary text-primary-foreground shadow-sm"
                         : "text-foreground/80 hover:bg-primary/20 hover:text-primary"
                     }`}
                   >
-                    <Icon className="w-4 h-4 lg:w-5 lg:h-5" />
+                    <Icon className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
                     <span className="hidden sm:inline">{item.label}</span>
                   </Link>
                 );
@@ -57,17 +57,17 @@ export function WebLayout({ children }: WebLayoutProps) {
         </div>
       </header>
 
-      {/* Main Content - Full Width with proper padding */}
-      <main className="flex-1 w-full px-6 lg:px-12 xl:px-16 py-8 lg:py-12">
-        <div className="w-full max-w-6xl mx-auto">
+      {/* Main Content - Max width container */}
+      <main className="flex-1 w-full px-4 lg:px-8 py-5 lg:py-8">
+        <div className="w-full max-w-[1250px] mx-auto">
           {children}
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Footer - Reduced padding */}
       <footer className="bg-secondary/50 border-t border-border/50">
-        <div className="w-full px-6 lg:px-12 xl:px-16 py-6">
-          <div className="text-center text-sm text-foreground/60">
+        <div className="max-w-[1250px] mx-auto px-4 lg:px-8 py-4">
+          <div className="text-center text-xs text-foreground/60">
             جميع الحقوق محفوظة لمنصة حَقّي © 2024
           </div>
         </div>

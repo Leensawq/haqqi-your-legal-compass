@@ -21,30 +21,29 @@ export default function Home() {
 
   return (
     <WebLayout>
-      <div className="space-y-12" dir="rtl">
+      <div className="space-y-8" dir="rtl">
         <HeroSection />
 
-
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <div className="text-center mb-8">
-            <div className="flex items-center gap-2 justify-center mb-2">
-              <BookOpen className="w-6 h-6 text-primary" />
-              <h2 className="text-2xl md:text-3xl font-bold text-foreground">أكاديمية حَقّي</h2>
+          <div className="text-center mb-5">
+            <div className="flex items-center gap-1.5 justify-center mb-1.5">
+              <BookOpen className="w-4 h-4 text-primary" />
+              <h2 className="text-lg md:text-xl font-bold text-foreground">أكاديمية حَقّي</h2>
             </div>
-            <p className="text-base text-muted-foreground">الحق يبدأ بالمعرفة</p>
+            <p className="text-xs text-muted-foreground">الحق يبدأ بالمعرفة</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {categories.map((category, index) => (
-              <motion.div key={category.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 * index }}
+              <motion.div key={category.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}
                 onClick={() => navigate(`/academy?category=${encodeURIComponent(category.title)}`)}
-                className="bg-card rounded-xl p-6 cursor-pointer hover:shadow-lg transition-all duration-300 border border-border hover:border-primary/50 group">
-                <div className="flex items-start gap-4">
-                  <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                    <category.icon className="w-7 h-7 text-primary" />
+                className="bg-card rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300 border border-border hover:border-primary/50 group">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                    <category.icon className="w-5 h-5 text-primary" />
                   </div>
                   <div className="flex-1 text-right">
-                    <h3 className="text-lg font-bold text-card-foreground mb-2">{category.title}</h3>
-                    <p className="text-sm text-muted-foreground">{category.description}</p>
+                    <h3 className="text-sm font-bold text-card-foreground mb-1">{category.title}</h3>
+                    <p className="text-xs text-muted-foreground">{category.description}</p>
                   </div>
                 </div>
               </motion.div>
