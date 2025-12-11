@@ -133,6 +133,8 @@ export default function CaseAnalysis() {
       return;
     }
     setShowValidationWarning(false);
+    // Save user data to localStorage for letter generation
+    localStorage.setItem('userData', JSON.stringify(formData));
     setStep("success");
   };
 
