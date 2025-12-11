@@ -127,8 +127,8 @@ export function SpeechToText({ onTranscript, className = "", disabled = false }:
             size="icon"
             onClick={toggleListening}
             disabled={disabled}
-            className={`h-10 w-10 text-primary hover:text-primary/80 hover:bg-primary/10 ${
-              isListening ? "bg-primary/20 animate-pulse" : ""
+            className={`h-10 w-10 text-primary/40 hover:text-primary/60 hover:bg-primary/5 ${
+              isListening ? "bg-primary/10 animate-pulse text-primary/60" : ""
             } ${className}`}
             aria-label={isListening ? "إيقاف التسجيل" : "تحدث الآن"}
           >
