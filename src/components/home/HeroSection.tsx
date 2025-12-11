@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Scale, Shield, FileCheck, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import heroIllustration from "@/assets/hero-illustration.png";
 
 export function HeroSection() {
   const navigate = useNavigate();
@@ -48,35 +48,12 @@ export function HeroSection() {
             className="order-2 flex justify-center lg:justify-start"
           >
             <div className="relative">
-              {/* Main illustration card */}
-              <div className="bg-primary/10 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-8 shadow-xl min-w-[200px] lg:min-w-[240px]">
-                <div className="flex flex-col items-center gap-5">
-                  {/* Icons grid */}
-                  <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
-                      <Scale className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
-                    </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
-                      <Shield className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
-                    </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
-                      <FileCheck className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
-                    </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
-                      <CheckCircle className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
-                    </div>
-                  </div>
-                  
-                  {/* Caption */}
-                  <p className="text-xs text-muted-foreground text-center px-2">
-                    تحليل آلي يعتمد على الأنظمة السعودية
-                  </p>
-                </div>
-              </div>
-              
-              {/* Decorative elements */}
-              <div className="absolute -top-3 -right-3 w-6 h-6 bg-primary/30 rounded-full blur-sm" />
-              <div className="absolute -bottom-4 -left-4 w-8 h-8 bg-primary/20 rounded-full blur-md" />
+              {/* Hero illustration image */}
+              <img 
+                src={heroIllustration} 
+                alt="حقي - منصة الحقوق القانونية" 
+                className="w-64 h-64 lg:w-80 lg:h-80 object-contain drop-shadow-xl"
+              />
             </div>
           </motion.div>
         </div>
