@@ -14,7 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      case_followups: {
+        Row: {
+          case_id: string
+          created_at: string
+          file_name: string | null
+          file_url: string | null
+          id: string
+          notes: string | null
+          submitted_at: string
+          submitted_to_authority: boolean | null
+          user_id: string | null
+        }
+        Insert: {
+          case_id: string
+          created_at?: string
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          submitted_at?: string
+          submitted_to_authority?: boolean | null
+          user_id?: string | null
+        }
+        Update: {
+          case_id?: string
+          created_at?: string
+          file_name?: string | null
+          file_url?: string | null
+          id?: string
+          notes?: string | null
+          submitted_at?: string
+          submitted_to_authority?: boolean | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "case_followups_case_id_fkey"
+            columns: ["case_id"]
+            isOneToOne: false
+            referencedRelation: "cases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cases: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          status: string
+          status_type: string
+          submitted_at: string
+          title: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          status_type?: string
+          submitted_at?: string
+          title: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          status?: string
+          status_type?: string
+          submitted_at?: string
+          title?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
