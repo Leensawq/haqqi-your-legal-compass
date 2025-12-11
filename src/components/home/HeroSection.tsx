@@ -49,7 +49,7 @@ export function HeroSection() {
           >
             <div className="relative">
               {/* Main illustration card */}
-              <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-8 shadow-xl min-w-[200px] lg:min-w-[240px]">
+              <div className="bg-primary/10 backdrop-blur-sm border border-border/50 rounded-2xl p-6 lg:p-8 shadow-xl min-w-[200px] lg:min-w-[240px]">
                 <div className="flex flex-col items-center gap-5">
                   {/* Icons grid */}
                   <div className="grid grid-cols-2 gap-3 lg:gap-4">
