@@ -4,12 +4,31 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, FileCheck, CheckCircle2, Scale, ChevronLeft, 
   FileText, CreditCard, IdCard, Building2, Receipt,
-  Download, ExternalLink, Plus
+  Download, ExternalLink, Plus, AlertCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { WebLayout } from "@/components/layout/WebLayout";
+import { useAuth } from "@/contexts/AuthContext";
 
 type AnalysisStep = "analyzing" | "legal-right" | "official-steps" | "checklist" | "success";
+
+const saudiRegions = [
+  "الرياض",
+  "مكة المكرمة", 
+  "المدينة المنورة",
+  "الشرقية",
+  "القصيم",
+  "عسير",
+  "تبوك",
+  "حائل",
+  "الحدود الشمالية",
+  "جازان",
+  "نجران",
+  "الباحة",
+  "الجوف",
+];
 
 const legalSources = [
   { name: "نظام العمل السعودي – المادة 90", checked: false },
@@ -35,10 +54,24 @@ const initialChecklistItems = [
 
 export default function CaseAnalysis() {
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [step, setStep] = useState<AnalysisStep>("analyzing");
   const [progress, setProgress] = useState(0);
   const [checkedSources, setCheckedSources] = useState<boolean[]>([false, false, false]);
   const [completedItems, setCompletedItems] = useState<Record<number, boolean>>({});
+  const [showValidationWarning, setShowValidationWarning] = useState(false);
+
+  // Form state with prefill from profile
+  const [formData, setFormData] = useState({
+    fullName: "محمد أحمد",
+    nationalId: user?.nationalId || "",
+    region: "",
+    city: "",
+    phone: "0501234567",
+    email: "mohammed@example.com",
+    employer: "",
+    jobTitle: "",
+  });
 
   const totalItems = initialChecklistItems.length;
   const completedCount = Object.values(completedItems).filter(Boolean).length;
@@ -49,6 +82,26 @@ export default function CaseAnalysis() {
       ...prev,
       [id]: !prev[id]
     }));
+  };
+
+  const isFormValid = () => {
+    return (
+      formData.fullName.trim() !== "" &&
+      formData.nationalId.trim().length === 10 &&
+      formData.region !== "" &&
+      formData.city.trim() !== "" &&
+      formData.phone.trim() !== "" &&
+      formData.email.trim() !== ""
+    );
+  };
+
+  const handleContinue = () => {
+    if (!isFormValid()) {
+      setShowValidationWarning(true);
+      return;
+    }
+    setShowValidationWarning(false);
+    setStep("success");
   };
 
   useEffect(() => {
@@ -295,7 +348,127 @@ export default function CaseAnalysis() {
                 })}
               </div>
 
-              <Button className="w-full py-6 text-lg" onClick={() => setStep("success")}>
+              {/* Basic Info Form */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-2xl p-6 lg:p-8 border border-gray-200 shadow-sm"
+              >
+                <h3 className="text-xl font-bold text-gray-900 mb-6">بياناتك الأساسية</h3>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+                  {/* Full Name */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">الاسم الكامل *</label>
+                    <Input
+                      value={formData.fullName}
+                      onChange={(e) => setFormData(prev => ({ ...prev, fullName: e.target.value }))}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  {/* National ID */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">رقم الهوية الوطنية *</label>
+                    <Input
+                      value={formData.nationalId}
+                      onChange={(e) => setFormData(prev => ({ ...prev, nationalId: e.target.value }))}
+                      placeholder="10 أرقام"
+                      maxLength={10}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  {/* Region */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">المنطقة *</label>
+                    <Select value={formData.region} onValueChange={(val) => setFormData(prev => ({ ...prev, region: val }))}>
+                      <SelectTrigger className="bg-gray-50 border-gray-300 text-gray-900">
+                        <SelectValue placeholder="اختر المنطقة" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-white border-gray-200 z-50">
+                        {saudiRegions.map((region) => (
+                          <SelectItem key={region} value={region}>{region}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  {/* City */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">المدينة *</label>
+                    <Input
+                      value={formData.city}
+                      onChange={(e) => setFormData(prev => ({ ...prev, city: e.target.value }))}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  {/* Phone */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">رقم الجوال *</label>
+                    <Input
+                      value={formData.phone}
+                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                      placeholder="+966 أو 05"
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">البريد الإلكتروني *</label>
+                    <Input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  {/* Employer (Optional) */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">جهة العمل <span className="text-gray-400">(اختياري)</span></label>
+                    <Input
+                      value={formData.employer}
+                      onChange={(e) => setFormData(prev => ({ ...prev, employer: e.target.value }))}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  {/* Job Title (Optional) */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">المسمى الوظيفي <span className="text-gray-400">(اختياري)</span></label>
+                    <Input
+                      value={formData.jobTitle}
+                      onChange={(e) => setFormData(prev => ({ ...prev, jobTitle: e.target.value }))}
+                      className="bg-gray-50 border-gray-300 text-gray-900"
+                      dir="rtl"
+                    />
+                  </div>
+                </div>
+
+                {/* Validation Warning */}
+                {showValidationWarning && !isFormValid() && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="mt-4 flex items-center gap-2 text-amber-600 bg-amber-50 p-3 rounded-lg border border-amber-200"
+                  >
+                    <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                    <span className="text-sm">من فضلك أكمل بياناتك الأساسية قبل المتابعة</span>
+                  </motion.div>
+                )}
+              </motion.div>
+
+              <Button className="w-full py-6 text-lg" onClick={handleContinue}>
                 أنا جاهز — متابعة
               </Button>
             </motion.div>
