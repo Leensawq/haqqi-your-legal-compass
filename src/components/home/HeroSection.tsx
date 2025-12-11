@@ -53,16 +53,16 @@ export function HeroSection() {
                 <div className="flex flex-col items-center gap-5">
                   {/* Icons grid */}
                   <div className="grid grid-cols-2 gap-3 lg:gap-4">
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/20 flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
                       <Scale className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
                     </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
                       <Shield className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
                     </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
                       <FileCheck className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
                     </div>
-                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/20 flex items-center justify-center shadow-md">
+                    <div className="w-14 h-14 lg:w-16 lg:h-16 rounded-xl bg-primary/10 flex items-center justify-center shadow-md hover:bg-primary/20 transition-colors">
                       <CheckCircle className="w-7 h-7 lg:w-8 lg:h-8 text-primary" />
                     </div>
                   </div>
