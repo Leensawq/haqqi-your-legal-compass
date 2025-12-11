@@ -5,7 +5,6 @@ import { Bell, Clock, CheckCircle2, AlertCircle, FileText, ChevronLeft, MessageC
 import { WebLayout } from "@/components/layout/WebLayout";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
 interface Case {
@@ -23,11 +22,6 @@ interface Notification {
   text: string;
   time: string;
 }
-
-const notifications: Notification[] = [
-  { id: 1, text: "تم تحديث حالة قضية تأخر الراتب", time: "منذ ساعتين" },
-  { id: 2, text: "تم استلام رد من وزارة الموارد البشرية", time: "منذ يوم" },
-];
 
 const getStatusColor = (statusType: string) => {
   switch (statusType) {
@@ -59,57 +53,31 @@ export default function MyCases() {
   const navigate = useNavigate();
   const [selectedCase, setSelectedCase] = useState<string | null>(null);
   const [cases, setCases] = useState<Case[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
   const { toast } = useToast();
 
   useEffect(() => {
-    fetchCases();
+    loadCases();
   }, []);
 
-  const fetchCases = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        setLoading(false);
-        return;
+  const loadCases = () => {
+    // Load cases from localStorage
+    const storedCases = localStorage.getItem('userCases');
+    if (storedCases) {
+      try {
+        const parsed = JSON.parse(storedCases);
+        setCases(parsed);
+        
+        // Generate notifications from recent cases
+        const recentNotifications = parsed.slice(0, 2).map((c: Case, i: number) => ({
+          id: i + 1,
+          text: `تم تحديث حالة قضية: ${c.title.substring(0, 30)}...`,
+          time: i === 0 ? "منذ ساعتين" : "منذ يوم"
+        }));
+        setNotifications(recentNotifications);
+      } catch (e) {
+        console.error('Failed to parse cases:', e);
       }
-
-      // Fetch cases
-      const { data: casesData, error: casesError } = await supabase
-        .from('cases')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false });
-
-      if (casesError) throw casesError;
-
-      // Check for followups for each case
-      const casesWithFollowups = await Promise.all(
-        (casesData || []).map(async (c) => {
-          const { data: followups } = await supabase
-            .from('case_followups')
-            .select('id')
-            .eq('case_id', c.id)
-            .eq('submitted_to_authority', true)
-            .limit(1);
-
-          return {
-            ...c,
-            has_followup: (followups && followups.length > 0)
-          };
-        })
-      );
-
-      setCases(casesWithFollowups);
-    } catch (error) {
-      console.error('Error fetching cases:', error);
-      toast({
-        title: "خطأ",
-        description: "حدث خطأ أثناء تحميل القضايا",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -126,6 +94,16 @@ export default function MyCases() {
     }
 
     navigate(`/case-followup?caseId=${caseItem.id}&title=${encodeURIComponent(caseItem.title)}`);
+  };
+
+  const markAsEscalated = (caseId: string) => {
+    const updatedCases = cases.map(c => 
+      c.id === caseId 
+        ? { ...c, status: 'تم الإحالة لهيئة حقوق الإنسان', status_type: 'escalated', has_followup: true }
+        : c
+    );
+    setCases(updatedCases);
+    localStorage.setItem('userCases', JSON.stringify(updatedCases));
   };
 
   return (
@@ -158,9 +136,7 @@ export default function MyCases() {
         <div className="space-y-4">
           <h2 className="text-xl font-bold text-foreground">جميع القضايا</h2>
           
-          {loading ? (
-            <div className="text-center py-8 text-muted-foreground">جاري التحميل...</div>
-          ) : cases.length === 0 ? (
+          {cases.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               لا توجد قضايا مسجلة حتى الآن
             </div>

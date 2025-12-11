@@ -12,8 +12,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { WebLayout } from "@/components/layout/WebLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 type AnalysisStep = "analyzing" | "legal-right" | "official-steps" | "checklist" | "success";
 
@@ -129,7 +127,7 @@ export default function CaseAnalysis() {
     );
   };
 
-  const handleContinue = async () => {
+  const handleContinue = () => {
     if (!isFormValid()) {
       setShowValidationWarning(true);
       return;
@@ -138,34 +136,25 @@ export default function CaseAnalysis() {
     // Save user data to localStorage for letter generation
     localStorage.setItem('userData', JSON.stringify(formData));
     
-    // Save case to database
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        const caseSituation = localStorage.getItem('caseSituation') || '';
-        const caseTitle = caseSituation.substring(0, 50) + (caseSituation.length > 50 ? '...' : '');
-        
-        const { error } = await supabase
-          .from('cases')
-          .insert({
-            user_id: user.id,
-            title: caseTitle || 'قضية جديدة',
-            category: analysis?.legalRight?.reference?.includes('العمل') ? 'العمل' : 'عام',
-            description: caseSituation,
-            status: 'تم الإرسال',
-            status_type: 'sent',
-            submitted_at: new Date().toISOString()
-          });
-        
-        if (error) {
-          console.error('Error saving case:', error);
-        } else {
-          toast.success('تم حفظ القضية بنجاح');
-        }
-      }
-    } catch (error) {
-      console.error('Error saving case:', error);
-    }
+    // Save case to localStorage
+    const caseSituation = localStorage.getItem('caseSituation') || '';
+    const caseTitle = caseSituation.substring(0, 50) + (caseSituation.length > 50 ? '...' : '');
+    
+    const newCase = {
+      id: crypto.randomUUID(),
+      title: caseTitle || 'قضية جديدة',
+      category: analysis?.legalRight?.reference?.includes('العمل') ? 'العمل' : 'عام',
+      description: caseSituation,
+      status: 'تم الإرسال',
+      status_type: 'sent',
+      submitted_at: new Date().toISOString(),
+      has_followup: false
+    };
+    
+    // Get existing cases and add new one
+    const existingCases = JSON.parse(localStorage.getItem('userCases') || '[]');
+    existingCases.unshift(newCase);
+    localStorage.setItem('userCases', JSON.stringify(existingCases));
     
     setStep("success");
   };
