@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Home, FilePlus, FolderOpen, User } from "lucide-react";
-import haqqiLogo from "@/assets/haqqi-logo.png";
+import haqqiLogo from "@/assets/haqqi-logo-new.png";
 
 interface WebLayoutProps {
   children: ReactNode;
@@ -28,7 +28,7 @@ export function WebLayout({ children }: WebLayoutProps) {
               to="/home" 
               className="flex items-center gap-2 hover:opacity-80 transition-opacity"
             >
-              <img src={haqqiLogo} alt="حَقّي" className="h-8 lg:h-9 w-auto" />
+              <img src={haqqiLogo} alt="حَقّي" className="h-10 lg:h-12 w-auto" />
               <span className="text-base lg:text-lg font-bold text-foreground">حَقّي</span>
             </Link>
 
