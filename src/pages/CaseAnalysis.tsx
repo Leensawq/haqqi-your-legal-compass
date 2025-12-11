@@ -12,6 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { WebLayout } from "@/components/layout/WebLayout";
 import { useAuth } from "@/contexts/AuthContext";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 type AnalysisStep = "analyzing" | "legal-right" | "official-steps" | "checklist" | "success";
 
@@ -127,7 +129,7 @@ export default function CaseAnalysis() {
     );
   };
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (!isFormValid()) {
       setShowValidationWarning(true);
       return;
@@ -135,6 +137,36 @@ export default function CaseAnalysis() {
     setShowValidationWarning(false);
     // Save user data to localStorage for letter generation
     localStorage.setItem('userData', JSON.stringify(formData));
+    
+    // Save case to database
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const caseSituation = localStorage.getItem('caseSituation') || '';
+        const caseTitle = caseSituation.substring(0, 50) + (caseSituation.length > 50 ? '...' : '');
+        
+        const { error } = await supabase
+          .from('cases')
+          .insert({
+            user_id: user.id,
+            title: caseTitle || 'قضية جديدة',
+            category: analysis?.legalRight?.reference?.includes('العمل') ? 'العمل' : 'عام',
+            description: caseSituation,
+            status: 'تم الإرسال',
+            status_type: 'sent',
+            submitted_at: new Date().toISOString()
+          });
+        
+        if (error) {
+          console.error('Error saving case:', error);
+        } else {
+          toast.success('تم حفظ القضية بنجاح');
+        }
+      }
+    } catch (error) {
+      console.error('Error saving case:', error);
+    }
+    
     setStep("success");
   };
 
