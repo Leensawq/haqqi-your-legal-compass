@@ -48,7 +48,7 @@ export default function MyCases() {
           <div className="space-y-3">
             {notifications.map((n) => (
               <div key={n.id} className="flex items-center justify-between p-3 bg-background rounded-lg">
-                <span className="text-card-foreground">{n.text}</span>
+                <span className="text-primary-foreground">{n.text}</span>
                 <span className="text-xs text-muted-foreground">{n.time}</span>
               </div>
             ))}
