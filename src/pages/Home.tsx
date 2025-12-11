@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, Search, BookOpen, Globe, Baby, Accessibility } from "lucide-react";
+import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, BookOpen, Globe, Baby, Accessibility } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 const categories = [
   { icon: Briefcase, title: "حقوق العمل", description: "الرواتب والإجازات والفصل التعسفي" },
@@ -29,12 +28,6 @@ export default function Home() {
           <Button onClick={() => navigate("/new-case")} size="lg" className="text-xl px-10 py-8 rounded-xl font-bold shadow-lg hover:shadow-xl transition-shadow">أدخل موقفي الآن</Button>
         </motion.section>
 
-        <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="max-w-2xl mx-auto">
-          <div className="relative">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-            <Input type="text" placeholder="ابحث عن حق أو مادة نظامية…" className="w-full pr-12 py-6 text-base bg-card border-border text-card-foreground rounded-xl" dir="rtl" />
-          </div>
-        </motion.section>
 
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
           <div className="text-center mb-8">
