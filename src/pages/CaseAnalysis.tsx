@@ -266,12 +266,8 @@ export default function CaseAnalysis() {
                       item.status === "complete" ? "border-primary/50" : "border-border/50"
                     }`}
                   >
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center ${
-                      item.status === "complete" ? "bg-primary/20" : "bg-background/20"
-                    }`}>
-                      <item.icon className={`w-7 h-7 ${
-                        item.status === "complete" ? "text-primary" : "text-foreground/50"
-                      }`} />
+                    <div className="w-14 h-14 rounded-xl flex items-center justify-center bg-primary">
+                      <item.icon className="w-7 h-7 text-primary-foreground" />
                     </div>
                     <span className="flex-1 font-medium text-lg text-foreground">{item.title}</span>
                     {item.status === "complete" ? (
