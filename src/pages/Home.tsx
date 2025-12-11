@@ -26,7 +26,7 @@ export default function Home() {
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center py-12 lg:py-16">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-6 leading-tight">منصّة حَقّي لمساعدتك في مواقفك القانونية</h1>
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة</p>
-          <Button onClick={() => navigate("/new-case")} size="lg" className="text-lg px-8 py-6 rounded-xl">أدخل موقفي الآن</Button>
+          <Button onClick={() => navigate("/new-case")} size="lg" className="text-xl px-10 py-8 rounded-xl font-bold shadow-lg hover:shadow-xl transition-shadow">أدخل موقفي الآن</Button>
         </motion.section>
 
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="max-w-2xl mx-auto">
@@ -37,9 +37,12 @@ export default function Home() {
         </motion.section>
 
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-          <div className="flex items-center gap-2 mb-8 justify-center">
-            <BookOpen className="w-6 h-6 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-bold text-foreground">تعلّم حقوقك</h2>
+          <div className="text-center mb-8">
+            <div className="flex items-center gap-2 justify-center mb-2">
+              <BookOpen className="w-6 h-6 text-primary" />
+              <h2 className="text-2xl md:text-3xl font-bold text-foreground">أكاديمية حَقّي</h2>
+            </div>
+            <p className="text-base text-muted-foreground">الحق يبدأ بالمعرفة</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {categories.map((category, index) => (
