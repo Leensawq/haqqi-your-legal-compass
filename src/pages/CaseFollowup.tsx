@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
 
 export default function CaseFollowup() {
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ export default function CaseFollowup() {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!caseId) {
       toast({
         title: "خطأ",
@@ -48,79 +48,35 @@ export default function CaseFollowup() {
 
     setIsSubmitting(true);
 
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        toast({
-          title: "خطأ",
-          description: "يجب تسجيل الدخول أولاً",
-          variant: "destructive",
-        });
-        return;
+    // Update case status in localStorage
+    const storedCases = localStorage.getItem('userCases');
+    if (storedCases) {
+      try {
+        const cases = JSON.parse(storedCases);
+        const updatedCases = cases.map((c: any) => 
+          c.id === caseId 
+            ? { ...c, status: 'تم الإحالة لهيئة حقوق الإنسان', status_type: 'escalated', has_followup: true }
+            : c
+        );
+        localStorage.setItem('userCases', JSON.stringify(updatedCases));
+      } catch (e) {
+        console.error('Failed to update case:', e);
       }
-
-      let fileUrl = null;
-      let fileName = null;
-
-      if (file) {
-        const fileExt = file.name.split('.').pop();
-        const filePath = `${user.id}/${caseId}/${Date.now()}.${fileExt}`;
-        
-        const { error: uploadError } = await supabase.storage
-          .from('case-followups')
-          .upload(filePath, file);
-
-        if (uploadError) {
-          throw uploadError;
-        }
-
-        const { data: urlData } = supabase.storage
-          .from('case-followups')
-          .getPublicUrl(filePath);
-
-        fileUrl = urlData.publicUrl;
-        fileName = file.name;
-      }
-
-      const { error: insertError } = await supabase
-        .from('case_followups')
-        .insert({
-          case_id: caseId,
-          user_id: user.id,
-          file_url: fileUrl,
-          file_name: fileName,
-          notes: notes,
-          submitted_to_authority: true,
-        });
-
-      if (insertError) {
-        throw insertError;
-      }
-
-      // Update the case status
-      const { error: updateError } = await supabase
-        .from('cases')
-        .update({ 
-          status: 'تم الإحالة لهيئة حقوق الإنسان',
-          status_type: 'escalated'
-        })
-        .eq('id', caseId);
-
-      if (updateError) {
-        throw updateError;
-      }
-
-      setIsSubmitted(true);
-    } catch (error) {
-      console.error('Error submitting followup:', error);
-      toast({
-        title: "خطأ",
-        description: "حدث خطأ أثناء إرسال المتابعة",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
     }
+
+    // Store followup data in localStorage
+    const followups = JSON.parse(localStorage.getItem('caseFollowups') || '[]');
+    followups.push({
+      id: Date.now().toString(),
+      case_id: caseId,
+      file_name: file?.name || null,
+      notes: notes,
+      submitted_at: new Date().toISOString(),
+    });
+    localStorage.setItem('caseFollowups', JSON.stringify(followups));
+
+    setIsSubmitting(false);
+    setIsSubmitted(true);
   };
 
   if (isSubmitted) {
