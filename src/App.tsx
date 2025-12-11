@@ -12,6 +12,7 @@ import MyCases from "./pages/MyCases";
 import Profile from "./pages/Profile";
 import Academy from "./pages/Academy";
 import LetterGeneration from "./pages/LetterGeneration";
+import CaseFollowup from "./pages/CaseFollowup";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +33,7 @@ const App = () => (
             <Route path="/profile" element={<Profile />} />
             <Route path="/academy" element={<Academy />} />
             <Route path="/letter-generation" element={<LetterGeneration />} />
+            <Route path="/case-followup" element={<CaseFollowup />} />
             <Route path="/" element={<Navigate to="/login" replace />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
