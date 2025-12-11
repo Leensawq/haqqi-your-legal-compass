@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Send, Edit3 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,33 +16,44 @@ interface ComplaintLetter {
   legalReference: string;
 }
 
-const defaultLetterTemplate = `السلام عليكم ورحمة الله وبركاته،
-
-إلى سعادة مدير إدارة الموارد البشرية المحترم،
-
-الموضوع: شكوى بخصوص الفصل التعسفي
-
-أتقدم إليكم بهذه الشكوى بصفتي موظفًا سابقًا في شركة [اسم الشركة]، حيث تم إنهاء خدماتي بتاريخ [التاريخ] دون سبب مشروع وبما يخالف أحكام نظام العمل.
-
-وبناءً على ما سبق، أطالب بما يلي:
-1. التعويض عن الفصل التعسفي
-2. صرف مستحقات نهاية الخدمة
-3. تزويدي بشهادة خبرة
-
-وتفضلوا بقبول فائق الاحترام والتقدير،
-
-مقدم الشكوى: محمد أحمد العتيبي
-رقم الهوية: 1098765432
-التاريخ: ${new Date().toLocaleDateString('ar-SA')}`;
+interface UserData {
+  fullName: string;
+  nationalId: string;
+  phone: string;
+  email: string;
+}
 
 export default function LetterGeneration() {
+  const navigate = useNavigate();
   const [recipient, setRecipient] = useState("وزارة الموارد البشرية");
-  const [letterContent, setLetterContent] = useState(defaultLetterTemplate);
+  const [letterContent, setLetterContent] = useState("");
   const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState<UserData>({
+    fullName: "",
+    nationalId: "",
+    phone: "",
+    email: ""
+  });
 
-  // Load AI-generated letter from localStorage
+  // Load AI-generated letter and user data from localStorage
   useEffect(() => {
     const storedAnalysis = localStorage.getItem('caseAnalysis');
+    const storedUserData = localStorage.getItem('userData');
+    
+    let userName = "مقدم الشكوى";
+    let userNationalId = "";
+    
+    if (storedUserData) {
+      try {
+        const parsed = JSON.parse(storedUserData);
+        userName = parsed.fullName || userName;
+        userNationalId = parsed.nationalId || "";
+        setUserData(parsed);
+      } catch (e) {
+        console.error('Failed to parse user data:', e);
+      }
+    }
+    
     if (storedAnalysis) {
       try {
         const analysis = JSON.parse(storedAnalysis);
@@ -50,7 +61,7 @@ export default function LetterGeneration() {
         if (letter) {
           setRecipient(letter.recipient || "وزارة الموارد البشرية");
           
-          // Build full letter content
+          // Build full letter content with actual user name
           const fullLetter = `السلام عليكم ورحمة الله وبركاته،
 
 إلى سعادة ${letter.recipient}،
@@ -63,8 +74,8 @@ ${letter.body}
 
 وتفضلوا بقبول فائق الاحترام والتقدير،
 
-مقدم الشكوى: محمد أحمد العتيبي
-رقم الهوية: 1098765432
+مقدم الشكوى: ${userName}
+رقم الهوية: ${userNationalId}
 التاريخ: ${new Date().toLocaleDateString('ar-SA')}`;
           
           setLetterContent(fullLetter);
@@ -90,7 +101,8 @@ ${letter.body}
     // Clear case data and navigate to home
     localStorage.removeItem('caseAnalysis');
     localStorage.removeItem('caseSituation');
-    window.location.href = '/home';
+    localStorage.removeItem('userData');
+    navigate('/home');
   };
 
   return (
@@ -128,7 +140,6 @@ ${letter.body}
               onClick={() => setIsEditing(!isEditing)}
               className="text-primary"
             >
-              <Edit3 className="ml-1 h-4 w-4" />
               {isEditing ? "معاينة" : "تعديل"}
             </Button>
           </div>
@@ -160,7 +171,6 @@ ${letter.body}
           transition={{ delay: 0.2 }}
         >
           <Button onClick={handleSend} className="w-full py-4">
-            <Send className="ml-2 h-4 w-4" />
             إرسال الخطاب
           </Button>
         </motion.div>

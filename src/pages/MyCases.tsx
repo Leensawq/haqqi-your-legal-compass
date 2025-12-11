@@ -1,7 +1,10 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Bell, Clock, CheckCircle2, AlertCircle, FileText, ChevronLeft } from "lucide-react";
+import { Bell, Clock, CheckCircle2, AlertCircle, FileText, ChevronLeft, MessageCircleQuestion } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
+import { Button } from "@/components/ui/button";
 
 const notifications = [
   { id: 1, text: "تم تحديث حالة قضية تأخر الراتب", time: "منذ ساعتين" },
@@ -32,6 +35,14 @@ const getStatusIcon = (statusType: string) => {
 };
 
 export default function MyCases() {
+  const navigate = useNavigate();
+  const [selectedCase, setSelectedCase] = useState<number | null>(null);
+
+  const handleNoResponse = (caseId: number) => {
+    // Navigate to letter generation for follow-up
+    navigate("/letter-generation");
+  };
+
   return (
     <WebLayout>
       <div className="max-w-4xl mx-auto space-y-8" dir="rtl">
@@ -64,22 +75,57 @@ export default function MyCases() {
           <div className="grid gap-4">
             {cases.map((c, i) => {
               const Icon = getStatusIcon(c.statusType);
+              const isExpanded = selectedCase === c.id;
               return (
-                <motion.div key={c.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                  className="bg-card rounded-xl p-6 border border-border hover:border-primary/50 transition-colors cursor-pointer group">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-lg font-bold text-card-foreground">{c.title}</h3>
-                        <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">{c.category}</span>
+                <motion.div 
+                  key={c.id} 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ delay: i * 0.1 }}
+                  className="bg-card rounded-xl border border-border hover:border-primary/50 transition-colors"
+                >
+                  <div 
+                    className="p-6 cursor-pointer"
+                    onClick={() => setSelectedCase(isExpanded ? null : c.id)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-lg font-bold text-card-foreground">{c.title}</h3>
+                          <span className="text-xs bg-secondary text-secondary-foreground px-2 py-1 rounded">{c.category}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                          <span className={`flex items-center gap-1 px-2 py-1 rounded ${getStatusColor(c.statusType)}`}>
+                            <Icon className="w-3 h-3" />
+                            {c.status}
+                          </span>
+                          <span>آخر تحديث: {new Date(c.date).toLocaleDateString("ar-SA")}</span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                        <span className={`flex items-center gap-1 px-2 py-1 rounded ${getStatusColor(c.statusType)}`}><Icon className="w-3 h-3" />{c.status}</span>
-                        <span>آخر تحديث: {new Date(c.date).toLocaleDateString("ar-SA")}</span>
-                      </div>
+                      <ChevronLeft className={`w-5 h-5 text-muted-foreground transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
                     </div>
-                    <ChevronLeft className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </div>
+                  
+                  {/* Expanded Section with "No Response" Button */}
+                  {isExpanded && c.statusType === "sent" && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      className="px-6 pb-6 border-t border-border/50"
+                    >
+                      <div className="pt-4">
+                        <Button
+                          onClick={() => handleNoResponse(c.id)}
+                          variant="outline"
+                          className="w-full py-4 text-base border-warning/50 text-warning hover:bg-warning/10 hover:border-warning"
+                        >
+                          <MessageCircleQuestion className="w-5 h-5 ml-2" />
+                          ما لقيت تجاوب؟ أرسل خطاب متابعة
+                        </Button>
+                      </div>
+                    </motion.div>
+                  )}
                 </motion.div>
               );
             })}
