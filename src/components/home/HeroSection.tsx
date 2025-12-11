@@ -53,7 +53,7 @@ export function HeroSection() {
                 src={heroIllustration} 
                 alt="حقي - منصة الحقوق القانونية" 
                 className="w-64 h-64 lg:w-80 lg:h-80 object-contain"
-                style={{ filter: 'drop-shadow(0 0 20px rgba(255, 255, 255, 0.4))' }}
+                style={{ filter: 'drop-shadow(0 15px 25px rgba(0, 180, 216, 0.5))' }}
               />
             </div>
           </motion.div>
