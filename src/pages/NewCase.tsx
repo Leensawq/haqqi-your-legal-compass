@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { WebLayout } from "@/components/layout/WebLayout";
+import { SpeechToText } from "@/components/accessibility/SpeechToText";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 
 export default function NewCase() {
   const navigate = useNavigate();
@@ -21,6 +23,10 @@ export default function NewCase() {
     }, 1000);
   };
 
+  const handleTranscript = (text: string) => {
+    setSituation((prev) => prev + (prev ? " " : "") + text);
+  };
+
   return (
     <WebLayout>
       <div className="max-w-3xl mx-auto" dir="rtl">
@@ -31,9 +37,12 @@ export default function NewCase() {
         >
           {/* Header */}
           <div className="text-center space-y-4">
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
-              صف موقِفك
-            </h1>
+            <div className="flex items-center justify-center gap-2">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+                صف موقِفك
+              </h1>
+              <TextToSpeech text="صف موقفك. اكتب تفاصيل الموقف وسنحلله وفق الأنظمة السعودية" />
+            </div>
             <p className="text-lg text-muted-foreground">
               اكتب تفاصيل الموقف وسنحلله وفق الأنظمة السعودية
             </p>
@@ -52,13 +61,18 @@ export default function NewCase() {
                 <label className="block text-sm font-semibold text-gray-800">
                   وصف الموقف
                 </label>
-                <Textarea
-                  value={situation}
-                  onChange={(e) => setSituation(e.target.value)}
-                  placeholder="مثال: لم أستلم راتبي لمدة ٣ شهور من صاحب العمل رغم مطالبتي المتكررة..."
-                  className="min-h-[200px] text-base bg-white border-gray-300 text-gray-900 resize-none placeholder:text-gray-400"
-                  dir="rtl"
-                />
+                <div className="relative">
+                  <Textarea
+                    value={situation}
+                    onChange={(e) => setSituation(e.target.value)}
+                    placeholder="مثال: لم أستلم راتبي لمدة ٣ شهور من صاحب العمل رغم مطالبتي المتكررة..."
+                    className="min-h-[200px] text-base bg-white border-gray-300 text-gray-900 resize-none placeholder:text-gray-400 pl-12"
+                    dir="rtl"
+                  />
+                  <div className="absolute left-2 top-2">
+                    <SpeechToText onTranscript={handleTranscript} />
+                  </div>
+                </div>
               </div>
 
               {/* Attachments */}

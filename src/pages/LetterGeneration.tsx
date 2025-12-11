@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "@/hooks/use-toast";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
+import { SpeechToText } from "@/components/accessibility/SpeechToText";
 
 const letterTemplate = `السلام عليكم ورحمة الله وبركاته،
 
@@ -70,7 +72,10 @@ export default function LetterGeneration() {
           className="space-y-2"
         >
           <div className="flex items-center justify-between">
-            <label className="text-sm font-medium text-foreground">محتوى الخطاب</label>
+            <div className="flex items-center gap-2">
+              <label className="text-sm font-medium text-foreground">محتوى الخطاب</label>
+              <TextToSpeech text={letterContent} />
+            </div>
             <Button
               variant="ghost"
               size="sm"
@@ -82,12 +87,17 @@ export default function LetterGeneration() {
             </Button>
           </div>
           {isEditing ? (
-            <Textarea
-              value={letterContent}
-              onChange={(e) => setLetterContent(e.target.value)}
-              className="min-h-[400px] bg-white font-arabic text-base leading-relaxed text-[#000000] placeholder:text-[#6B7280]"
-              style={{ lineHeight: '1.6', fontSize: '16px' }}
-            />
+            <div className="relative">
+              <Textarea
+                value={letterContent}
+                onChange={(e) => setLetterContent(e.target.value)}
+                className="min-h-[400px] bg-white font-arabic text-base leading-relaxed text-[#000000] placeholder:text-[#6B7280] pl-12"
+                style={{ lineHeight: '1.6', fontSize: '16px' }}
+              />
+              <div className="absolute left-2 top-2">
+                <SpeechToText onTranscript={(text) => setLetterContent(prev => prev + " " + text)} />
+              </div>
+            </div>
           ) : (
             <div className="rounded-xl bg-white p-4 text-base leading-relaxed whitespace-pre-wrap text-[#000000] border border-gray-200"
               style={{ lineHeight: '1.6', fontSize: '16px' }}>

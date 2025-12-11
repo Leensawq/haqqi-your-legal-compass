@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { HeroSection } from "@/components/home/HeroSection";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 
 const categories = [
   { icon: Briefcase, title: "حقوق العمل", description: "الرواتب والإجازات والفصل التعسفي" },
@@ -40,6 +41,7 @@ export default function Home() {
             <div className="flex items-center gap-1.5 justify-center mb-1.5">
               <BookOpen className="w-4 h-4 text-primary" />
               <h2 className="text-lg md:text-xl font-bold text-foreground">أكاديمية حَقّي</h2>
+              <TextToSpeech text="أكاديمية حقي. الحق يبدأ بالمعرفة. تصفح فئات الحقوق المختلفة مثل حقوق العمل وحقوق الأسرة والحقوق الصحية." />
             </div>
             <p className="text-xs text-muted-foreground">الحق يبدأ بالمعرفة</p>
           </div>

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Bell, Clock, CheckCircle2, AlertCircle, FileText, ChevronLeft } from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 
 const notifications = [
   { id: 1, text: "تم تحديث حالة قضية تأخر الراتب", time: "منذ ساعتين" },
@@ -35,7 +36,10 @@ export default function MyCases() {
     <WebLayout>
       <div className="max-w-4xl mx-auto space-y-8" dir="rtl">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">قضاياتي</h1>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl font-bold text-foreground">قضاياتي</h1>
+            <TextToSpeech text="قضاياتي. تابع جميع قضاياك وتحديثاتها" />
+          </div>
           <p className="text-muted-foreground mt-2">تابع جميع قضاياك وتحديثاتها</p>
         </div>
 
