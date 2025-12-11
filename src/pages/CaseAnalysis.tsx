@@ -33,8 +33,11 @@ const saudiRegions = [
 
 // AI Analysis Interface
 interface AIAnalysis {
+  reassuranceMessage?: string;
   empathyMessage?: string;
   isUserRight?: boolean;
+  userRights?: string[];
+  userObligations?: string[];
   legalRight: {
     title: string;
     reference: string;
@@ -42,6 +45,7 @@ interface AIAnalysis {
   };
   legalSources: string[];
   officialSteps: { number: number; title: string; description: string }[];
+  futureTips?: string[];
   complaintLetter: {
     recipient: string;
     subject: string;
@@ -223,7 +227,7 @@ export default function CaseAnalysis() {
             </motion.div>
           )}
 
-          {/* Step 2: Legal Right */}
+          {/* Step 2: Legal Right - New Structure */}
           {step === "legal-right" && (
             <motion.div
               key="legal-right"
@@ -232,48 +236,134 @@ export default function CaseAnalysis() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-6"
             >
-              {/* Empathy Message */}
-              {analysis?.empathyMessage && (
-                <div className={`rounded-2xl p-6 border mb-6 ${
-                  analysis.isUserRight === false 
-                    ? "bg-amber-500/10 border-amber-500/30" 
-                    : "bg-primary/10 border-primary/30"
-                }`}>
-                  <div className="flex items-start gap-3">
-                    <TextToSpeech text={analysis.empathyMessage} />
-                    <p className="text-lg text-foreground leading-relaxed">{analysis.empathyMessage}</p>
-                  </div>
-                </div>
-              )}
-
-              <div className="bg-secondary/30 rounded-2xl p-8 border border-border/50">
-                <div className="flex items-center gap-4 mb-8">
-                  <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center">
-                    <Scale className="w-7 h-7 text-primary" />
+              {/* 1) طمأنة أولية */}
+              <div className="bg-primary/10 rounded-2xl p-6 border border-primary/30">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-lg">💬</span>
                   </div>
                   <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-2xl lg:text-3xl font-bold text-foreground">{analysis?.legalRight?.title || "حقك القانوني"}</h2>
-                      <TextToSpeech text={`${analysis?.legalRight?.title || "حقك القانوني"}. ${analysis?.legalRight?.rights?.join("، ") || ""}`} />
+                    <h3 className="text-lg font-bold text-primary mb-2">نحن فاهمين وضعك</h3>
+                    <div className="flex items-start gap-2">
+                      <TextToSpeech text={analysis?.reassuranceMessage || "واضح من وصفك أنك مريت بموقف مزعج، ومن حقك تفهم وضعك النظامي بكل بساطة ووضوح. خلني أوضح لك الصورة بدون تعقيد، وبأسلوب يساعدك تعرف وش لك وش عليك."} />
+                      <p className="text-base text-foreground leading-relaxed">
+                        {analysis?.reassuranceMessage || "واضح من وصفك أنك مريت بموقف مزعج، ومن حقك تفهم وضعك النظامي بكل بساطة ووضوح. خلني أوضح لك الصورة بدون تعقيد، وبأسلوب يساعدك تعرف وش لك وش عليك."}
+                      </p>
                     </div>
-                    <p className="text-base text-primary">{analysis?.legalRight?.reference || ""}</p>
                   </div>
                 </div>
+              </div>
 
-                <div className="space-y-4">
-                  <p className="text-xl text-foreground leading-relaxed">
-                    بناءً على الأنظمة السعودية، لديك الحق في:
+              {/* 2) وش لك؟ وش عليك؟ */}
+              <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
+                    <span className="text-lg">🟩</span>
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">وش لك؟ وش عليك؟</h3>
+                </div>
+                
+                {/* وش لك من حقوق؟ */}
+                <div className="mb-6">
+                  <h4 className="text-base font-bold text-green-500 mb-3 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" />
+                    وش لك من حقوق؟
+                  </h4>
+                  <ul className="space-y-2">
+                    {(analysis?.userRights || analysis?.legalRight?.rights || []).map((right, index) => (
+                      <li key={index} className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
+                        <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                        <span className="text-base text-foreground">{right}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* وش قد يكون عليك؟ */}
+                {(analysis?.userObligations && analysis.userObligations.length > 0) && (
+                  <div>
+                    <h4 className="text-base font-bold text-red-500 mb-3 flex items-center gap-2">
+                      <span>❌</span>
+                      وش قد يكون عليك؟
+                    </h4>
+                    <ul className="space-y-2">
+                      {analysis.userObligations.map((obligation, index) => (
+                        <li key={index} className="flex items-start gap-3 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
+                          <span className="text-red-500 mt-0.5 flex-shrink-0">•</span>
+                          <span className="text-base text-foreground">{obligation}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                <p className="text-sm text-foreground/60 mt-4 italic">
+                  هذا تقييم عام… والتحليل النهائي يكون مستند على الأنظمة الرسمية.
+                </p>
+              </div>
+
+              {/* 3) وش المفروض يصير؟ */}
+              <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
+                    <span className="text-lg">🟧</span>
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-foreground">وش المفروض يصير؟</h3>
+                    <p className="text-sm text-primary">{analysis?.legalRight?.reference}</p>
+                  </div>
+                </div>
+                
+                <div className="bg-background/20 rounded-xl p-4 mb-4">
+                  <p className="text-base text-foreground mb-3">
+                    بحسب <span className="font-bold text-primary">{analysis?.legalRight?.reference}</span>، المفروض يتم:
                   </p>
-                  <ul className="space-y-3 list-none">
+                  <ul className="space-y-2">
                     {(analysis?.legalRight?.rights || []).map((right, index) => (
-                      <li key={index} className="flex items-start gap-4 p-4 bg-background/20 rounded-xl hover:bg-background/30 transition-colors">
-                        <CheckCircle2 className="w-6 h-6 text-primary mt-0.5 flex-shrink-0" />
-                        <span className="text-lg text-foreground">{right}</span>
+                      <li key={index} className="flex items-start gap-2">
+                        <span className="text-primary">•</span>
+                        <span className="text-base text-foreground">{right}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="text-sm text-foreground/70">
+                  <strong>المصادر القانونية:</strong>
+                  <ul className="mt-2 space-y-1">
+                    {(analysis?.legalSources || []).map((source, index) => (
+                      <li key={index} className="flex items-center gap-2">
+                        <Scale className="w-4 h-4 text-primary" />
+                        <span>{source}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
               </div>
+
+              {/* 5) نصائح مستقبلية */}
+              {(analysis?.futureTips && analysis.futureTips.length > 0) && (
+                <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
+                      <span className="text-lg">🟪</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-foreground">نصائح مستقبلية ذكية</h3>
+                  </div>
+                  <p className="text-sm text-foreground/70 mb-4">عشان تكون جاهز وتتفادى أي مشكلة مشابهة مستقبلًا:</p>
+                  <ul className="space-y-2">
+                    {analysis.futureTips.map((tip, index) => (
+                      <li key={index} className="flex items-start gap-3 p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
+                        <span className="text-purple-500">💡</span>
+                        <span className="text-base text-foreground">{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="text-sm text-foreground/60 mt-4 italic">
+                    "وإذا صار أي شيء مشابه… اكتب لي الوضع، وأنا أحلله لك خلال ثواني."
+                  </p>
+                </div>
+              )}
 
               <div className="flex gap-4">
                 <Button variant="outline" className="flex-1 py-6 text-lg border-border/50 text-foreground hover:bg-primary/20 hover:text-primary hover:border-primary" onClick={() => navigate("/home")}>
@@ -287,7 +377,7 @@ export default function CaseAnalysis() {
             </motion.div>
           )}
 
-          {/* Step 3: Official Steps */}
+          {/* Step 3: Official Steps - 🟫 وش تسوي الآن؟ */}
           {step === "official-steps" && (
             <motion.div
               key="official-steps"
@@ -296,29 +386,64 @@ export default function CaseAnalysis() {
               exit={{ opacity: 0, y: -20 }}
               className="space-y-8"
             >
-              <div className="text-center mb-8">
-                <h1 className="text-3xl lg:text-4xl font-bold text-foreground">الخطوات الرسمية</h1>
-                <p className="text-lg text-foreground/70 mt-2">اتبع هذه الخطوات لتقديم شكواك</p>
-              </div>
+              <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-12 h-12 rounded-full bg-amber-600/20 flex items-center justify-center">
+                    <span className="text-xl">🟫</span>
+                  </div>
+                  <div>
+                    <h1 className="text-2xl lg:text-3xl font-bold text-foreground">وش تسوي الآن؟</h1>
+                    <p className="text-base text-foreground/70">علشان تحمي حقك وتبدأ بالطريقة الصحيحة</p>
+                  </div>
+                </div>
 
-              <div className="space-y-4">
-                {(analysis?.officialSteps || []).map((item, index) => (
-                  <motion.div
-                    key={item.number}
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.1 }}
-                    className="bg-secondary/30 rounded-xl p-6 border border-border/50 flex items-start gap-5 hover:bg-secondary/50 hover:border-primary/30 transition-all cursor-default"
-                  >
-                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
-                      <span className="text-primary-foreground font-bold text-lg">{item.number}</span>
+                <div className="space-y-4">
+                  {(analysis?.officialSteps || []).map((item, index) => (
+                    <motion.div
+                      key={item.number}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="bg-background/20 rounded-xl p-5 border border-border/30 flex items-start gap-5 hover:bg-background/30 hover:border-primary/30 transition-all"
+                    >
+                      <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center flex-shrink-0">
+                        <span className="text-primary-foreground font-bold text-lg">{item.number}</span>
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-lg text-foreground mb-1">{item.title}</h3>
+                        <p className="text-base text-foreground/70">{item.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Responsible Authority */}
+                {analysis?.responsibleAuthority && (
+                  <div className="mt-6 p-4 bg-primary/10 rounded-xl border border-primary/30">
+                    <h4 className="font-bold text-foreground mb-2">الجهة المختصة:</h4>
+                    <div className="space-y-2 text-base">
+                      <p className="flex items-center gap-2">
+                        <Building2 className="w-5 h-5 text-primary" />
+                        <span className="text-foreground">{analysis.responsibleAuthority.name}</span>
+                      </p>
+                      <p className="flex items-center gap-2">
+                        <span className="text-primary">📞</span>
+                        <span className="text-foreground">{analysis.responsibleAuthority.contact}</span>
+                      </p>
+                      {analysis.responsibleAuthority.website && (
+                        <a 
+                          href={analysis.responsibleAuthority.website} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 text-primary hover:underline"
+                        >
+                          <ExternalLink className="w-5 h-5" />
+                          <span>زيارة الموقع الرسمي</span>
+                        </a>
+                      )}
                     </div>
-                    <div>
-                      <h3 className="font-bold text-lg text-foreground mb-1">{item.title}</h3>
-                      <p className="text-base text-foreground/70">{item.description}</p>
-                    </div>
-                  </motion.div>
-                ))}
+                  </div>
+                )}
               </div>
 
               <Button className="w-full py-6 text-lg" onClick={() => setStep("checklist")}>
