@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Image, Upload, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+
 import { WebLayout } from "@/components/layout/WebLayout";
 import { SpeechToText } from "@/components/accessibility/SpeechToText";
 import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
@@ -21,7 +21,7 @@ interface UploadedFile {
 export default function NewCase() {
   const navigate = useNavigate();
   const [situation, setSituation] = useState("");
-  const [ocrEnabled, setOcrEnabled] = useState(false);
+  
   const [isLoading, setIsLoading] = useState(false);
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const imageInputRef = useRef<HTMLInputElement>(null);
@@ -225,13 +225,6 @@ export default function NewCase() {
                 )}
               </div>
 
-              {/* OCR Toggle */}
-              <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200">
-                <label className="text-sm font-medium text-gray-800">
-                  تفعيل قراءة النصوص من المرفقات (OCR)
-                </label>
-                <Switch checked={ocrEnabled} onCheckedChange={setOcrEnabled} />
-              </div>
 
               {/* Submit Button */}
               <Button
