@@ -31,15 +31,13 @@ export function HeroSection() {
             </p>
             
             {/* CTA Button */}
-            <div className="flex justify-end mt-6">
-              <Button 
-                onClick={() => navigate("/new-case")} 
-                size="lg" 
-                className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02]"
-              >
-                أدخل موقفي الآن
-              </Button>
-            </div>
+            <Button 
+              onClick={() => navigate("/new-case")} 
+              size="lg" 
+              className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] mt-6"
+            >
+              أدخل موقفي الآن
+            </Button>
           </motion.div>
 
           {/* Left side - Illustration panel */}
