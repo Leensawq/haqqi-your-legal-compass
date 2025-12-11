@@ -12,42 +12,44 @@ export function HeroSection() {
       <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/10 via-transparent to-transparent pointer-events-none" />
       
-      <div className="relative max-w-[1200px] mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-10 lg:gap-14 items-center">
+      <div className="relative max-w-[1100px] mx-auto px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-8 lg:gap-10 items-center">
           
           {/* Right side - Text content (RTL: appears first) */}
           <motion.div 
             initial={{ opacity: 0, x: 20 }} 
             animate={{ opacity: 1, x: 0 }} 
             transition={{ duration: 0.6 }}
-            className="text-right order-1 flex flex-col items-center lg:items-end"
+            className="order-1"
           >
-            <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground leading-tight text-center lg:text-right">
-              منصّة حَقّي لمساعدتك في مواقفك القانونية
-            </h1>
-            
-            <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mt-5 text-center lg:text-right">
-              نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة
-            </p>
-            
-            {/* CTA Button */}
-            <Button 
-              onClick={() => navigate("/new-case")} 
-              size="lg" 
-              className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] mt-7"
-            >
-              أدخل موقفي الآن
-            </Button>
+            <div className="flex flex-col items-end text-right">
+              <h1 className="text-2xl md:text-3xl lg:text-4xl font-extrabold text-foreground leading-tight">
+                منصّة حَقّي لمساعدتك في مواقفك القانونية
+              </h1>
+              
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed max-w-lg mt-6">
+                نساعدك في فهم حقوقك القانونية وتحليل وضعك وإرشادك للخطوات الصحيحة
+              </p>
+              
+              {/* CTA Button */}
+              <Button 
+                onClick={() => navigate("/new-case")} 
+                size="lg" 
+                className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] mt-5"
+              >
+                أدخل موقفي الآن
+              </Button>
 
-            {/* Trust badges strip */}
-            <div className="flex flex-wrap justify-center lg:justify-end gap-4 sm:gap-6 text-xs text-muted-foreground mt-4">
-              <div className="flex items-center gap-1.5">
-                <span>يعتمد على الأنظمة السعودية الرسمية</span>
-                <Shield className="w-3.5 h-3.5 text-primary flex-shrink-0" />
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span>لا يستبدل الاستشارة القانونية المتخصصة</span>
-                <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+              {/* Trust badges strip */}
+              <div className="flex flex-wrap justify-end gap-4 sm:gap-5 text-xs text-muted-foreground mt-4">
+                <div className="flex items-center gap-1.5">
+                  <span>يعتمد على الأنظمة السعودية الرسمية</span>
+                  <Shield className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span>لا يستبدل الاستشارة القانونية المتخصصة</span>
+                  <CheckCircle className="w-3.5 h-3.5 text-primary flex-shrink-0" />
+                </div>
               </div>
             </div>
           </motion.div>
