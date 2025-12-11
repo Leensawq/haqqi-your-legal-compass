@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { useAuth } from "@/contexts/AuthContext";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 
 type AnalysisStep = "analyzing" | "legal-right" | "official-steps" | "checklist" | "success";
 
@@ -208,8 +209,11 @@ export default function CaseAnalysis() {
                   <div className="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center">
                     <Scale className="w-7 h-7 text-primary" />
                   </div>
-                  <div>
-                    <h2 className="text-2xl lg:text-3xl font-bold text-foreground">حقك القانوني</h2>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-2xl lg:text-3xl font-bold text-foreground">حقك القانوني</h2>
+                      <TextToSpeech text="حقك القانوني. بناءً على نظام العمل السعودي المادة 90، لديك الحق في استلام راتبك كاملاً في موعده المحدد، تقديم شكوى لدى مكتب العمل في حال التأخير، المطالبة بالتعويض عن الأضرار الناتجة عن التأخير، وإنهاء العقد بدون إشعار في حال التأخر أكثر من 60 يوماً." />
+                    </div>
                     <p className="text-base text-primary">نظام العمل السعودي – المادة 90</p>
                   </div>
                 </div>

@@ -8,6 +8,7 @@ import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/contexts/AuthContext";
+import { TextToSpeech } from "@/components/accessibility/TextToSpeech";
 
 export default function Profile() {
   const { user, logout } = useAuth();
@@ -24,7 +25,10 @@ export default function Profile() {
     <WebLayout>
       <div className="max-w-2xl mx-auto space-y-8" dir="rtl">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-foreground">حسابي</h1>
+          <div className="flex items-center justify-center gap-2">
+            <h1 className="text-3xl font-bold text-foreground">حسابي</h1>
+            <TextToSpeech text="حسابي. إدارة معلومات حسابك" />
+          </div>
           <p className="text-muted-foreground mt-2">إدارة معلومات حسابك</p>
         </div>
 
