@@ -52,8 +52,12 @@ export function HeroSection() {
               <img 
                 src={heroIllustration} 
                 alt="حقي - منصة الحقوق القانونية" 
-                className="w-64 h-64 lg:w-80 lg:h-80 object-contain"
-                style={{ filter: 'drop-shadow(0 15px 25px rgba(0, 180, 216, 0.5))' }}
+                className="w-64 h-64 lg:w-80 lg:h-80 object-contain relative z-10"
+              />
+              {/* Ground glow effect */}
+              <div 
+                className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 lg:w-60 h-6 rounded-full blur-xl"
+                style={{ background: 'rgba(0, 180, 216, 0.5)' }}
               />
             </div>
           </motion.div>
