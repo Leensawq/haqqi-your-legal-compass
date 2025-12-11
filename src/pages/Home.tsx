@@ -1,6 +1,17 @@
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Heart, Users, Wallet, Home as HomeIcon, ShoppingCart, BookOpen, Globe, Baby, Accessibility } from "lucide-react";
+import {
+  Briefcase,
+  Heart,
+  Users,
+  Wallet,
+  Home as HomeIcon,
+  ShoppingCart,
+  BookOpen,
+  Globe,
+  Baby,
+  Accessibility,
+} from "lucide-react";
 import { WebLayout } from "@/components/layout/WebLayout";
 import { HeroSection } from "@/components/home/HeroSection";
 
@@ -21,7 +32,7 @@ export default function Home() {
 
   return (
     <WebLayout>
-      <div className="space-y-8" dir="rtl">
+      <div className="space-y-4" dir="rtl">
         <HeroSection />
 
         <motion.section initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
@@ -34,9 +45,14 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {categories.map((category, index) => (
-              <motion.div key={category.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 * index }}
+              <motion.div
+                key={category.title}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.05 * index }}
                 onClick={() => navigate(`/academy?category=${encodeURIComponent(category.title)}`)}
-                className="bg-card rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300 border border-border hover:border-primary/50 group">
+                className="bg-card rounded-lg p-4 cursor-pointer hover:shadow-md transition-all duration-300 border border-border hover:border-primary/50 group"
+              >
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                     <category.icon className="w-5 h-5 text-primary" />
