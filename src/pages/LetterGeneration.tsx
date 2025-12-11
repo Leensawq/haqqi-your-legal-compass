@@ -31,9 +31,9 @@ const defaultLetterTemplate = `السلام عليكم ورحمة الله وب�
 
 وتفضلوا بقبول فائق الاحترام والتقدير،
 
-مقدم الشكوى: [الاسم]
-رقم الهوية: [رقم الهوية]
-التاريخ: [التاريخ]`;
+مقدم الشكوى: محمد أحمد العتيبي
+رقم الهوية: 1098765432
+التاريخ: ${new Date().toLocaleDateString('ar-SA')}`;
 
 export default function LetterGeneration() {
   const [recipient, setRecipient] = useState("وزارة الموارد البشرية");
@@ -63,8 +63,8 @@ ${letter.body}
 
 وتفضلوا بقبول فائق الاحترام والتقدير،
 
-مقدم الشكوى: [الاسم]
-رقم الهوية: [رقم الهوية]
+مقدم الشكوى: محمد أحمد العتيبي
+رقم الهوية: 1098765432
 التاريخ: ${new Date().toLocaleDateString('ar-SA')}`;
           
           setLetterContent(fullLetter);
@@ -152,18 +152,6 @@ ${letter.body}
           )}
         </motion.div>
 
-        {/* User Info Fields */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="space-y-3"
-        >
-          <h3 className="text-sm font-medium text-foreground">بياناتك الشخصية</h3>
-          <Input placeholder="الاسم الكامل" className="bg-card" />
-          <Input placeholder="رقم الهوية" className="bg-card" />
-          <Input placeholder="رقم الجوال" className="bg-card" />
-        </motion.div>
 
         {/* Action Buttons */}
         <motion.div
