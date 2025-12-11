@@ -15,6 +15,7 @@ interface Case {
   status_type: string;
   submitted_at: string;
   has_followup?: boolean;
+  isDemo?: boolean;
 }
 
 interface Notification {
@@ -56,6 +57,18 @@ export default function MyCases() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const { toast } = useToast();
 
+  // Demo case that's always available for testing the workflow
+  const demoCase: Case = {
+    id: 'demo-case-001',
+    title: 'قضية تجريبية - تأخر صرف الراتب',
+    category: 'عمالية',
+    status: 'تم إرسال الشكوى',
+    status_type: 'sent',
+    submitted_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days ago
+    has_followup: false,
+    isDemo: true
+  };
+
   useEffect(() => {
     loadCases();
   }, []);
@@ -63,34 +76,42 @@ export default function MyCases() {
   const loadCases = () => {
     // Load cases from localStorage
     const storedCases = localStorage.getItem('userCases');
+    let userCases: Case[] = [];
+    
     if (storedCases) {
       try {
-        const parsed = JSON.parse(storedCases);
-        setCases(parsed);
-        
-        // Generate notifications from recent cases
-        const recentNotifications = parsed.slice(0, 2).map((c: Case, i: number) => ({
-          id: i + 1,
-          text: `تم تحديث حالة قضية: ${c.title.substring(0, 30)}...`,
-          time: i === 0 ? "منذ ساعتين" : "منذ يوم"
-        }));
-        setNotifications(recentNotifications);
+        userCases = JSON.parse(storedCases);
       } catch (e) {
         console.error('Failed to parse cases:', e);
       }
     }
+    
+    // Always include the demo case
+    const allCases = [demoCase, ...userCases.filter(c => c.id !== 'demo-case-001')];
+    setCases(allCases);
+    
+    // Generate notifications from recent cases
+    const recentNotifications = allCases.slice(0, 2).map((c: Case, i: number) => ({
+      id: i + 1,
+      text: `تم تحديث حالة قضية: ${c.title.substring(0, 30)}...`,
+      time: i === 0 ? "منذ ساعتين" : "منذ يوم"
+    }));
+    setNotifications(recentNotifications);
   };
 
   const handleNoResponse = (caseItem: Case) => {
-    const days = daysSinceSubmission(caseItem.submitted_at);
-    
-    if (days < 15) {
-      toast({
-        title: "لم تمر 15 يوم بعد",
-        description: `يجب انتظار ${15 - days} أيام إضافية قبل تقديم متابعة`,
-        variant: "destructive",
-      });
-      return;
+    // Demo case always allowed, otherwise check 7 days
+    if (!(caseItem as any).isDemo) {
+      const days = daysSinceSubmission(caseItem.submitted_at);
+      
+      if (days < 7) {
+        toast({
+          title: "لم تمر 7 أيام بعد",
+          description: `يجب انتظار ${7 - days} أيام إضافية قبل تقديم متابعة`,
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     navigate(`/case-followup?caseId=${caseItem.id}&title=${encodeURIComponent(caseItem.title)}`);
@@ -146,7 +167,7 @@ export default function MyCases() {
                 const Icon = getStatusIcon(c.status_type);
                 const isExpanded = selectedCase === c.id;
                 const days = daysSinceSubmission(c.submitted_at);
-                const canSubmitFollowup = days >= 15 && !c.has_followup && c.status_type === 'sent';
+                const canSubmitFollowup = ((c as any).isDemo || days >= 7) && !c.has_followup && c.status_type === 'sent';
                 
                 return (
                   <motion.div 
@@ -209,7 +230,7 @@ export default function MyCases() {
                               <MessageCircleQuestion className="w-5 h-5 ml-2" />
                               {canSubmitFollowup 
                                 ? 'ما لقيت تجاوب؟'
-                                : `انتظر ${15 - days} أيام إضافية`
+                                : `انتظر ${7 - days} أيام إضافية`
                               }
                             </Button>
                           ) : null}
