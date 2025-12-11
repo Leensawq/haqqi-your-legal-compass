@@ -43,13 +43,13 @@ export default function ComplaintGenerator() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-card rounded-xl shadow-lg overflow-hidden"
+          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200"
         >
           {/* Letter Header */}
-          <div className="bg-gradient-to-l from-primary/10 to-transparent p-4 border-b border-border flex items-center justify-between">
+          <div className="bg-gray-50 p-4 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <FileText className="w-5 h-5 text-primary" />
-              <span className="font-semibold text-card-foreground">معاينة الخطاب</span>
+              <span className="font-semibold text-gray-900">معاينة الخطاب</span>
             </div>
             <button
               onClick={() => setIsEditing(!isEditing)}
@@ -61,10 +61,10 @@ export default function ComplaintGenerator() {
           </div>
 
           {/* Letter Content */}
-          <div className="p-5 space-y-4 bg-gradient-to-b from-card to-accent/5">
+          <div className="p-5 space-y-4 bg-white">
             {/* To Section */}
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <Building2 className="w-4 h-4" />
                 <span>إلى:</span>
               </div>
@@ -72,10 +72,10 @@ export default function ComplaintGenerator() {
                 <Input
                   value={formData.recipientName}
                   onChange={(e) => setFormData({ ...formData, recipientName: e.target.value })}
-                  className="bg-input border-border"
+                  className="bg-gray-50 border-gray-300 text-gray-900"
                 />
               ) : (
-                <p className="font-semibold text-card-foreground pr-6">
+                <p className="font-semibold text-gray-900 pr-6">
                   {formData.recipientName}
                 </p>
               )}
@@ -83,7 +83,7 @@ export default function ComplaintGenerator() {
 
             {/* From Section */}
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm text-muted">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
                 <User className="w-4 h-4" />
                 <span>من:</span>
               </div>
@@ -93,55 +93,55 @@ export default function ComplaintGenerator() {
                     placeholder="الاسم"
                     value={formData.userName}
                     onChange={(e) => setFormData({ ...formData, userName: e.target.value })}
-                    className="bg-input border-border"
+                    className="bg-gray-50 border-gray-300 text-gray-900"
                   />
                   <Input
                     placeholder="رقم الهوية"
                     value={formData.userIdNumber}
                     onChange={(e) => setFormData({ ...formData, userIdNumber: e.target.value })}
-                    className="bg-input border-border"
+                    className="bg-gray-50 border-gray-300 text-gray-900"
                     dir="ltr"
                   />
                 </div>
               ) : (
                 <div className="pr-6">
-                  <p className="font-semibold text-card-foreground">{formData.userName}</p>
-                  <p className="text-sm text-muted" dir="ltr">{formData.userIdNumber}</p>
+                  <p className="font-semibold text-gray-900">{formData.userName}</p>
+                  <p className="text-sm text-gray-600" dir="ltr">{formData.userIdNumber}</p>
                 </div>
               )}
             </div>
 
             {/* Subject */}
-            <div className="bg-primary/5 rounded-lg p-4 border border-primary/20">
-              <p className="text-sm text-muted mb-1">الموضوع:</p>
-              <p className="font-bold text-card-foreground">
+            <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <p className="text-sm text-gray-600 mb-1">الموضوع:</p>
+              <p className="font-bold text-gray-900">
                 شكوى تأخر صرف الأجور
               </p>
             </div>
 
             {/* Body */}
-            <div className="space-y-3 text-card-foreground leading-relaxed">
+            <div className="space-y-3 text-gray-800 leading-relaxed">
               <p>السلام عليكم ورحمة الله وبركاته،</p>
               <p>
                 أتقدم لسعادتكم بشكوى ضد {isEditing ? (
                   <Input
                     value={formData.employerName}
                     onChange={(e) => setFormData({ ...formData, employerName: e.target.value })}
-                    className="inline-block w-48 bg-input border-border mx-1"
+                    className="inline-block w-48 bg-gray-50 border-gray-300 text-gray-900 mx-1"
                   />
                 ) : (
                   <span className="font-semibold text-primary">{formData.employerName}</span>
                 )} بخصوص:
               </p>
-              <div className="bg-accent/30 rounded-lg p-3">
+              <div className="bg-gray-100 rounded-lg p-3">
                 {isEditing ? (
                   <Input
                     value={formData.complaintDetails}
                     onChange={(e) => setFormData({ ...formData, complaintDetails: e.target.value })}
-                    className="bg-input border-border"
+                    className="bg-gray-50 border-gray-300 text-gray-900"
                   />
                 ) : (
-                  <p className="text-card-foreground">{formData.complaintDetails}</p>
+                  <p className="text-gray-800">{formData.complaintDetails}</p>
                 )}
               </div>
               <p>
@@ -149,7 +149,7 @@ export default function ComplaintGenerator() {
                   <Input
                     value={formData.legalReference}
                     onChange={(e) => setFormData({ ...formData, legalReference: e.target.value })}
-                    className="inline-block w-56 bg-input border-border mx-1"
+                    className="inline-block w-56 bg-gray-50 border-gray-300 text-gray-900 mx-1"
                   />
                 ) : (
                   <span className="font-semibold text-primary">{formData.legalReference}</span>
@@ -162,10 +162,10 @@ export default function ComplaintGenerator() {
             </div>
 
             {/* Signature */}
-            <div className="pt-4 border-t border-border">
-              <p className="text-sm text-muted">التوقيع:</p>
-              <p className="font-semibold text-card-foreground">{formData.userName}</p>
-              <p className="text-xs text-muted mt-1">
+            <div className="pt-4 border-t border-gray-200">
+              <p className="text-sm text-gray-600">التوقيع:</p>
+              <p className="font-semibold text-gray-900">{formData.userName}</p>
+              <p className="text-xs text-gray-500 mt-1">
                 التاريخ: {new Date().toLocaleDateString('ar-SA')}
               </p>
             </div>
