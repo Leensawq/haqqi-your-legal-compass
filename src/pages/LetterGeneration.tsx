@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Download, Send, Edit3 } from "lucide-react";
+import { Send, Edit3 } from "lucide-react";
 import { PageLayout } from "@/components/layout/PageLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -153,18 +153,13 @@ ${letter.body}
         </motion.div>
 
 
-        {/* Action Buttons */}
+        {/* Action Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="grid grid-cols-2 gap-3"
+          transition={{ delay: 0.2 }}
         >
-          <Button onClick={handleDownload} variant="outline" className="py-4">
-            <Download className="ml-2 h-4 w-4" />
-            تحميل PDF
-          </Button>
-          <Button onClick={handleSend} className="py-4">
+          <Button onClick={handleSend} className="w-full py-4">
             <Send className="ml-2 h-4 w-4" />
             إرسال الخطاب
           </Button>
