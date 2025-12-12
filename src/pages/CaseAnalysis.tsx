@@ -4,7 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, FileCheck, CheckCircle2, Scale, ChevronLeft, 
   FileText, CreditCard, IdCard, Building2, Receipt,
-  Download, ExternalLink, Plus, AlertCircle
+  Download, ExternalLink, Plus, AlertCircle, ShieldCheck,
+  BookOpen, Lightbulb, ClipboardList, Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -263,10 +264,10 @@ export default function CaseAnalysis() {
               <div className="bg-primary/10 rounded-2xl p-6 border border-primary/30">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-                    <span className="text-lg">💬</span>
+                    <ShieldCheck className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-bold text-primary mb-2">نحن فاهمين وضعك</h3>
+                    <h3 className="text-lg font-bold text-primary mb-2">نفهم موقفك ونوضح لك حقوقك بوضوح</h3>
                     <div className="flex items-start gap-2">
                       <TextToSpeech text={analysis?.reassuranceMessage || "واضح من وصفك أنك مريت بموقف مزعج، ومن حقك تفهم وضعك النظامي بكل بساطة ووضوح. خلني أوضح لك الصورة بدون تعقيد، وبأسلوب يساعدك تعرف وش لك وش عليك."} />
                       <p className="text-base text-foreground leading-relaxed">
@@ -280,8 +281,8 @@ export default function CaseAnalysis() {
               {/* 2) وش لك؟ وش عليك؟ */}
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center">
-                    <span className="text-lg">🟩</span>
+                  <div className="w-10 h-10 rounded-full bg-[hsl(160,60%,40%)]/20 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-[hsl(160,60%,40%)]" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-xl font-bold text-foreground">وش لك؟ وش عليك؟</h3>
                 </div>
@@ -328,8 +329,8 @@ export default function CaseAnalysis() {
               {/* 3) وش المفروض يصير؟ */}
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center">
-                    <span className="text-lg">🟧</span>
+                  <div className="w-10 h-10 rounded-full bg-[hsl(35,80%,50%)]/20 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-[hsl(35,80%,50%)]" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-foreground">وش المفروض يصير؟</h3>
@@ -368,16 +369,16 @@ export default function CaseAnalysis() {
               {(analysis?.futureTips && analysis.futureTips.length > 0) && (
                 <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center">
-                      <span className="text-lg">🟪</span>
+                    <div className="w-10 h-10 rounded-full bg-[hsl(270,40%,50%)]/20 flex items-center justify-center">
+                      <Lightbulb className="w-5 h-5 text-[hsl(270,40%,50%)]" strokeWidth={1.5} />
                     </div>
                     <h3 className="text-xl font-bold text-foreground">نصائح مستقبلية ذكية</h3>
                   </div>
                   <p className="text-sm text-foreground/70 mb-4">عشان تكون جاهز وتتفادى أي مشكلة مشابهة مستقبلًا:</p>
                   <ul className="space-y-2">
                     {analysis.futureTips.map((tip, index) => (
-                      <li key={index} className="flex items-start gap-3 p-3 bg-purple-500/10 rounded-lg border border-purple-500/20">
-                        <span className="text-purple-500">💡</span>
+                      <li key={index} className="flex items-start gap-3 p-3 bg-[hsl(270,40%,50%)]/10 rounded-lg border border-[hsl(270,40%,50%)]/20">
+                        <Lightbulb className="w-5 h-5 text-[hsl(270,40%,50%)] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <span className="text-base text-foreground">{tip}</span>
                       </li>
                     ))}
@@ -411,8 +412,8 @@ export default function CaseAnalysis() {
             >
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-amber-600/20 flex items-center justify-center">
-                    <span className="text-xl">🟫</span>
+                  <div className="w-12 h-12 rounded-full bg-[hsl(35,80%,50%)]/20 flex items-center justify-center">
+                    <ClipboardList className="w-6 h-6 text-[hsl(35,80%,50%)]" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h1 className="text-2xl lg:text-3xl font-bold text-foreground">وش تسوي الآن؟</h1>
@@ -450,7 +451,7 @@ export default function CaseAnalysis() {
                         <span className="text-foreground">{analysis.responsibleAuthority.name}</span>
                       </p>
                       <p className="flex items-center gap-2">
-                        <span className="text-primary">📞</span>
+                        <Phone className="w-5 h-5 text-primary" strokeWidth={1.5} />
                         <span className="text-foreground">{analysis.responsibleAuthority.contact}</span>
                       </p>
                       {analysis.responsibleAuthority.website && (
