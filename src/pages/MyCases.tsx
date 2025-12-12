@@ -133,7 +133,7 @@ export default function MyCases() {
             <h1 className="text-3xl font-bold text-foreground">سجل المواقف </h1>
             <TextToSpeech text="قضاياتي. تابع جميع قضاياك وتحديثاتها" />
           </div>
-          <p className="text-muted-foreground mt-2">تابع جميع قضاياك وتحديثاتها</p>
+          <p className="text-muted-foreground mt-2">تابع جميع مواقفك وتحديثاتها</p>
         </div>
 
         <motion.div initial={{
