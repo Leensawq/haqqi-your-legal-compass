@@ -35,7 +35,7 @@ export function WebLayout({
           <div className="flex items-center justify-between h-12 lg:h-14">
             {/* Logo - Always navigates to /home */}
             <Link to="/home" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <img alt="حَقّي" src="/lovable-uploads/8465b8e3-90fd-433b-be05-50a96e5678ae.png" className="h-10 lg:h-8 w-auto" />
+              <img alt="حَقّي" src="/lovable-uploads/8465b8e3-90fd-433b-be05-50a96e5678ae.png" className="h-12 lg:h-10 w-auto" />
               <span className="text-base lg:text-lg font-bold text-foreground">حَقّي</span>
             </Link>
 
