@@ -2,8 +2,8 @@ import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
 interface AnalysisRequest {
@@ -13,19 +13,19 @@ interface AnalysisRequest {
 }
 
 serve(async (req) => {
-  if (req.method === 'OPTIONS') {
+  if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const { situation, userName, userNationalId }: AnalysisRequest = await req.json();
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    const openAIApiKey = Deno.env.get("OPENAI_API_KEY");
 
     if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
+      throw new Error("OPENAI_API_KEY is not configured");
     }
 
-    console.log('Analyzing case:', situation.substring(0, 100) + '...');
+    console.log("Analyzing case:", situation.substring(0, 100) + "...");
 
     const systemPrompt = `أنت مستشار قانوني سعودي خبير في الأنظمة المعمول بها في المملكة العربية السعودية
 (مثل نظام العمل، نظام الأحوال الشخصية، الأنظمة الجزائية والحقوقية)،
@@ -42,11 +42,10 @@ serve(async (req) => {
 ==================================================
 ## أسلوب الرد (اتبع هذا الهيكل معنويًا داخل JSON):
 
-### 1) رسالة طمأنة أولية – "نحن فاهمين وضعك"
+### 1) رسالة طمأنة أولية
 ابدأ دائمًا رسالة الطمأنة (حقل reassuranceMessage) بفكرة مثل:
 
-"واضح من وصفك أنك مريت بموقف غير مريح، ومن حقك تفهم وضعك النظامي بكل بساطة ووضوح.
-سأشرح لك الصورة بهدوء، وأوضح لك ما لك وما عليك، والخطوات العملية التي يمكنك اتخاذها.
+"يظهر من كلامك إنك واجهت موقف صعب، ومن حقك تتّضح لك الصورة النظامية بكل بساطة ووضوح. خلّيني أشرح لك حقوقك وخطواتك بشكل سهل يساعدك تعرف وش لك ووش عليك.
 تذكّر أن هذا تحليل مبدئي للتوعية ولا يغني عن استشارة قانونية متخصصة."
 
 غيّر الصياغة بحرية لكن حافظ على:
@@ -157,22 +156,22 @@ serve(async (req) => {
 
 الموقف: ${situation}
 
-${userName ? `اسم المستخدم: ${userName}` : ''}
-${userNationalId ? `رقم الهوية: ${userNationalId}` : ''}
+${userName ? `اسم المستخدم: ${userName}` : ""}
+${userNationalId ? `رقم الهوية: ${userNationalId}` : ""}
 
 قم بتحليل هذا الموقف وفق الأنظمة السعودية وقدم الرد بصيغة JSON كما هو مطلوب.`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${openAIApiKey}`,
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+        model: "gpt-4o-mini",
         messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt }
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
         ],
         temperature: 0.4,
         max_tokens: 2000,
@@ -181,14 +180,14 @@ ${userNationalId ? `رقم الهوية: ${userNationalId}` : ''}
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', response.status, errorText);
+      console.error("OpenAI API error:", response.status, errorText);
       throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
     const content = data.choices[0].message.content;
-    
-    console.log('Raw AI response:', content);
+
+    console.log("Raw AI response:", content);
 
     // Parse JSON from the response
     let analysis;
@@ -198,49 +197,49 @@ ${userNationalId ? `رقم الهوية: ${userNationalId}` : ''}
       if (jsonMatch) {
         analysis = JSON.parse(jsonMatch[0]);
       } else {
-        throw new Error('No JSON found in response');
+        throw new Error("No JSON found in response");
       }
     } catch (parseError) {
-      console.error('JSON parse error:', parseError);
+      console.error("JSON parse error:", parseError);
       // Return a default structure if parsing fails
       analysis = {
         legalRight: {
           title: "حقك القانوني",
           reference: "نظام العمل السعودي",
-          rights: ["لديك حق المطالبة بحقوقك وفق الأنظمة السعودية"]
+          rights: ["لديك حق المطالبة بحقوقك وفق الأنظمة السعودية"],
         },
         legalSources: ["نظام العمل السعودي"],
-        officialSteps: [
-          { number: 1, title: "تقديم شكوى", description: "تقديم شكوى للجهة المختصة" }
-        ],
+        officialSteps: [{ number: 1, title: "تقديم شكوى", description: "تقديم شكوى للجهة المختصة" }],
         complaintLetter: {
           recipient: "الجهة المختصة",
           subject: "شكوى",
           body: content,
-          legalReference: "الأنظمة السعودية"
+          legalReference: "الأنظمة السعودية",
         },
         responsibleAuthority: {
           name: "الجهة المختصة",
           contact: "الرقم الموحد",
-          website: ""
-        }
+          website: "",
+        },
       };
     }
 
-    console.log('Analysis complete');
+    console.log("Analysis complete");
 
     return new Response(JSON.stringify({ success: true, analysis }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   } catch (error) {
-    console.error('Error in analyze-case function:', error);
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error instanceof Error ? error.message : 'Unknown error' 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    console.error("Error in analyze-case function:", error);
+    return new Response(
+      JSON.stringify({
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
+      {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      },
+    );
   }
 });
