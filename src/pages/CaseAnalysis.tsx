@@ -204,7 +204,7 @@ export default function CaseAnalysis() {
             >
               <div className="text-center space-y-4">
                 <h1 className="text-3xl lg:text-4xl font-bold text-foreground">جاري تحليل حالتك...</h1>
-                <p className="text-lg text-foreground/70">نقوم بمراجعة الأنظمة واللوائح ذات الصلة</p>
+                <p className="text-lg text-foreground/70">جاري التحليل بناء على اللوائح والأنظمة السعودية المعتمدة</p>
               </div>
 
               {/* Progress Bar - RTL Direction */}
