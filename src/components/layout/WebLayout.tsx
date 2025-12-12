@@ -15,7 +15,7 @@ const navItems = [{
   icon: FilePlus
 }, {
   path: "/my-cases",
-  label: "قضاياتي",
+  label: "سجل المواقف",
   icon: FolderOpen
 }, {
   path: "/profile",
