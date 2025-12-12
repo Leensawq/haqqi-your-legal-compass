@@ -11,7 +11,7 @@ const navItems = [{
   icon: Home
 }, {
   path: "/new-case",
-  label: "قضية جديدة",
+  label: "إضافة موقف",
   icon: FilePlus
 }, {
   path: "/my-cases",
