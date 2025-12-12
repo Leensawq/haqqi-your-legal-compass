@@ -1,26 +1,28 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Home, FilePlus, FolderOpen, User } from "lucide-react";
+import { LayoutDashboard, MessageSquarePlus, ClipboardList, UserCircle } from "lucide-react";
 import haqqiLogo from "@/assets/haqqi-logo-new.png";
+
 interface WebLayoutProps {
   children: ReactNode;
 }
+
 const navItems = [{
   path: "/home",
   label: "الرئيسية",
-  icon: Home
+  icon: LayoutDashboard
 }, {
   path: "/new-case",
   label: "إضافة موقف",
-  icon: FilePlus
+  icon: MessageSquarePlus
 }, {
   path: "/my-cases",
   label: "سجل المواقف",
-  icon: FolderOpen
+  icon: ClipboardList
 }, {
   path: "/profile",
   label: "حسابي",
-  icon: User
+  icon: UserCircle
 }];
 export function WebLayout({
   children
@@ -43,7 +45,9 @@ export function WebLayout({
               const isActive = location.pathname === item.path;
               const Icon = item.icon;
               return <Link key={item.path} to={item.path} className={`flex items-center gap-1.5 px-3 lg:px-4 py-1.5 lg:py-2 rounded-lg text-xs lg:text-sm font-medium transition-all duration-200 ${isActive ? "bg-primary text-primary-foreground shadow-sm" : "text-foreground/80 hover:bg-primary/20 hover:text-primary"}`}>
-                    <Icon className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
+                    <div className={`w-6 h-6 rounded-full flex items-center justify-center ${isActive ? "bg-primary-foreground/10" : "bg-white/5"}`}>
+                      <Icon className="w-4 h-4" strokeWidth={1.5} />
+                    </div>
                     <span className="hidden sm:inline">{item.label}</span>
                   </Link>;
             })}
