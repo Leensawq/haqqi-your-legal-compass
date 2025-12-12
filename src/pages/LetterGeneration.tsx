@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { PageLayout } from "@/components/layout/PageLayout";
+import { WebLayout } from "@/components/layout/WebLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -106,8 +106,11 @@ ${letter.body}
   };
 
   return (
-    <PageLayout title="إنشاء خطاب رسمي">
-      <div className="space-y-6">
+    <WebLayout>
+      <div className="max-w-3xl mx-auto py-8 space-y-6">
+        {/* Page Title */}
+        <h1 className="text-2xl font-bold text-foreground mb-6">إنشاء خطاب رسمي</h1>
+        
         {/* Recipient */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -163,7 +166,6 @@ ${letter.body}
           )}
         </motion.div>
 
-
         {/* Action Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -175,6 +177,6 @@ ${letter.body}
           </Button>
         </motion.div>
       </div>
-    </PageLayout>
+    </WebLayout>
   );
 }
