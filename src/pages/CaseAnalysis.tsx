@@ -5,7 +5,7 @@ import {
   Search, FileCheck, CheckCircle2, Scale, ChevronLeft, 
   FileText, CreditCard, IdCard, Building2, Receipt,
   Download, ExternalLink, Plus, AlertCircle, ShieldCheck,
-  BookOpen, Lightbulb, ClipboardList, Phone
+  BookOpen, Lightbulb, ClipboardList, Phone, AlertTriangle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -289,14 +289,14 @@ export default function CaseAnalysis() {
                 
                 {/* وش لك من حقوق؟ */}
                 <div className="mb-6">
-                  <h4 className="text-base font-bold text-green-500 mb-3 flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5" />
+                  <h4 className="text-base font-bold text-primary mb-3 flex items-center gap-2">
+                    <CheckCircle2 className="w-5 h-5" strokeWidth={1.5} />
                     وش لك من حقوق؟
                   </h4>
                   <ul className="space-y-2">
                     {(analysis?.userRights || analysis?.legalRight?.rights || []).map((right, index) => (
-                      <li key={index} className="flex items-start gap-3 p-3 bg-green-500/10 rounded-lg border border-green-500/20">
-                        <CheckCircle2 className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <li key={index} className="flex items-start gap-3 p-3 bg-primary/5 rounded-lg border border-primary/10">
+                        <CheckCircle2 className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" strokeWidth={1.5} />
                         <span className="text-base text-foreground">{right}</span>
                       </li>
                     ))}
@@ -306,14 +306,14 @@ export default function CaseAnalysis() {
                 {/* وش قد يكون عليك؟ */}
                 {(analysis?.userObligations && analysis.userObligations.length > 0) && (
                   <div>
-                    <h4 className="text-base font-bold text-red-500 mb-3 flex items-center gap-2">
-                      <span>❌</span>
+                    <h4 className="text-base font-bold text-foreground/80 mb-3 flex items-center gap-2">
+                      <AlertTriangle className="w-5 h-5" strokeWidth={1.5} />
                       وش قد يكون عليك؟
                     </h4>
                     <ul className="space-y-2">
                       {analysis.userObligations.map((obligation, index) => (
-                        <li key={index} className="flex items-start gap-3 p-3 bg-red-500/10 rounded-lg border border-red-500/20">
-                          <span className="text-red-500 mt-0.5 flex-shrink-0">•</span>
+                        <li key={index} className="flex items-start gap-3 p-3 bg-muted/30 rounded-lg border border-border/30">
+                          <AlertTriangle className="w-5 h-5 text-foreground/60 mt-0.5 flex-shrink-0" strokeWidth={1.5} />
                           <span className="text-base text-foreground">{obligation}</span>
                         </li>
                       ))}
@@ -377,7 +377,7 @@ export default function CaseAnalysis() {
                   <p className="text-sm text-foreground/70 mb-4">عشان تكون جاهز وتتفادى أي مشكلة مشابهة مستقبلًا:</p>
                   <ul className="space-y-2">
                     {analysis.futureTips.map((tip, index) => (
-                      <li key={index} className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                      <li key={index} className="flex items-start gap-3 p-3 bg-muted/20 rounded-lg border border-border/20">
                         <Lightbulb className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <span className="text-base text-foreground">{tip}</span>
                       </li>
