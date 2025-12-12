@@ -281,8 +281,8 @@ export default function CaseAnalysis() {
               {/* 2) وش لك؟ وش عليك؟ */}
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-[hsl(160,60%,40%)]/20 flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-[hsl(160,60%,40%)]" strokeWidth={1.5} />
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-xl font-bold text-foreground">وش لك؟ وش عليك؟</h3>
                 </div>
@@ -329,8 +329,8 @@ export default function CaseAnalysis() {
               {/* 3) وش المفروض يصير؟ */}
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-10 h-10 rounded-full bg-[hsl(35,80%,50%)]/20 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-[hsl(35,80%,50%)]" strokeWidth={1.5} />
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-primary" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h3 className="text-xl font-bold text-foreground">وش المفروض يصير؟</h3>
@@ -369,16 +369,16 @@ export default function CaseAnalysis() {
               {(analysis?.futureTips && analysis.futureTips.length > 0) && (
                 <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-[hsl(270,40%,50%)]/20 flex items-center justify-center">
-                      <Lightbulb className="w-5 h-5 text-[hsl(270,40%,50%)]" strokeWidth={1.5} />
+                    <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                      <Lightbulb className="w-5 h-5 text-primary" strokeWidth={1.5} />
                     </div>
                     <h3 className="text-xl font-bold text-foreground">نصائح مستقبلية ذكية</h3>
                   </div>
                   <p className="text-sm text-foreground/70 mb-4">عشان تكون جاهز وتتفادى أي مشكلة مشابهة مستقبلًا:</p>
                   <ul className="space-y-2">
                     {analysis.futureTips.map((tip, index) => (
-                      <li key={index} className="flex items-start gap-3 p-3 bg-[hsl(270,40%,50%)]/10 rounded-lg border border-[hsl(270,40%,50%)]/20">
-                        <Lightbulb className="w-5 h-5 text-[hsl(270,40%,50%)] flex-shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <li key={index} className="flex items-start gap-3 p-3 bg-primary/10 rounded-lg border border-primary/20">
+                        <Lightbulb className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={1.5} />
                         <span className="text-base text-foreground">{tip}</span>
                       </li>
                     ))}
@@ -412,8 +412,8 @@ export default function CaseAnalysis() {
             >
               <div className="bg-secondary/30 rounded-2xl p-6 border border-border/50">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-full bg-[hsl(35,80%,50%)]/20 flex items-center justify-center">
-                    <ClipboardList className="w-6 h-6 text-[hsl(35,80%,50%)]" strokeWidth={1.5} />
+                  <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
+                    <ClipboardList className="w-6 h-6 text-primary" strokeWidth={1.5} />
                   </div>
                   <div>
                     <h1 className="text-2xl lg:text-3xl font-bold text-foreground">وش تسوي الآن؟</h1>
