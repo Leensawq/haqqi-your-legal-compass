@@ -65,7 +65,7 @@ export default function MyCases() {
   // Demo case that's always available for testing the workflow
   const demoCase: Case = {
     id: 'demo-case-001',
-    title: 'قضية تجريبية - تأخر صرف الراتب',
+    title: 'موقف تجريبي - تأخر صرف الراتب',
     category: 'عمالية',
     status: 'تم إرسال الشكوى',
     status_type: 'sent',
