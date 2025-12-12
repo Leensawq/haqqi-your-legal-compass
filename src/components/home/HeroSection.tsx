@@ -36,7 +36,7 @@ export function HeroSection() {
               size="lg" 
               className="text-sm px-6 py-2.5 rounded-lg font-bold shadow-md hover:shadow-lg transition-all duration-300 hover:scale-[1.02] mt-6"
             >
-              أدخل موقفي الآن
+              أدخل موقفك الآن
             </Button>
           </motion.div>
 
